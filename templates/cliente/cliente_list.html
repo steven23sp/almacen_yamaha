@@ -1,0 +1,47 @@
+{% extends 'list.html' %}
+{% block table %}
+    <thead>
+    <tr>
+        <!--<th class="center">
+            <label class="pos-rel">
+                <input type="checkbox" class="ace"/>
+                <span class="lbl"></span>
+            </label>
+        </th> -->
+        <th>Nombre</th>
+        <th>N. Documento</th>
+        <th>Correo</th>
+        <th>Telefono</th>
+        <th>Direccion</th>
+        <th>Opciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for cliente in object_list %}
+        <tr>
+            <!--<td class="center">
+                <label class="pos-rel">
+                    <input type="checkbox" class="ace"/>
+                    <span class="lbl"></span>
+                </label>
+            </td> -->
+            <td>{{ cliente.nombres }}</td>
+            <td>{{ cliente.numero_doc }}</td>
+            <td>{{ cliente.correo }}</td>
+            <td>{{ cliente.telefono }}</td>
+            <td>{{ cliente.direccion }}</td>
+            <td>
+                <a type="button" class="btn btn-outline-success btn-sm btn-round" data-toggle="tooltip"
+                       title="Editar Datos"
+                      href="{% url 'cliente:editar' cliente.id %}"><i class="fa fa-edit"></i>
+                </a>
+                <a type="button" class="btn btn-outline-danger btn-sm btn-round" data-toggle="tooltip"
+                       title="Eliminar Datos"
+                      href="{% url 'cliente:eliminar' cliente.id %}"><i class="fa fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+
+        {% endfor %}
+</tbody>
+{% endblock %}

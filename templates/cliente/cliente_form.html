@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block conten %}
+    <form method="post" action=".">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+        {{ form.media }}
+        <div class="card-footer">
+            <button type="submit" class="btn btn-warning btn-sm btn-flat">
+                <i class="fas fa-sync"></i> Guardar
+            </button>
+            <a href="{{ url }}" class="btn btn-info btn-sm btn-flat">
+                <i class="fas fa-times"></i> Cancelar
+            </a>
+        </div>
+    </form>
+    <script>
+        {% if form.errors %}
+            var errores = '';
+            {% for fied in form %}
+                {% for error in fied.errors %}
+                    errores += '{{ error }} \n';
+                {% endfor %}
+            {% endfor %}
+            Swal.fire({
+                title: 'Error!',
+                text: errores,
+                icon: 'error',
+            })
+        {% endif %}
+
+    </script>
+    <script>
+        $(function () {
+            $('#datetimepicker').datetimepicker({
+                format: 'L',
+                icono: {
+                    date: "fa fa-calendar"
+                }
+            });
+        });
+    </script>
+{% endblock %}
