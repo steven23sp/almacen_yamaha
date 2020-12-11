@@ -1,0 +1,49 @@
+{% extends 'list.html' %}
+{% block table %}
+    <thead>
+    <tr>
+        <!--<th class="center">
+            <label class="pos-rel">
+                <input type="checkbox" class="ace"/>
+                <span class="lbl"></span>
+            </label>
+        </th> -->
+        <th>Razon Social</th>
+        <th>Nombre</th>
+        <th>N. Documento</th>
+        <th>Correo</th>
+        <th>Telefono</th>
+        <th>Direccion</th>
+        <th>Opciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for proveedor in object_list %}
+        <tr>
+            <!--<td class="center">
+                <label class="pos-rel">
+                    <input type="checkbox" class="ace"/>
+                    <span class="lbl"></span>
+                </label>
+            </td> -->
+            <td>{{ proveedor.razon_social }}</td>
+            <td>{{ proveedor.nombres }}</td>
+            <td>{{ proveedor.numero_doc }}</td>
+            <td>{{ proveedor.correo }}</td>
+            <td>{{ proveedor.telefono }}</td>
+            <td>{{ proveedor.direccion }}</td>
+            <td>
+                <a type="button" class="btn btn-outline-success btn-sm btn-round" data-toggle="tooltip"
+                       title="Editar Datos"
+                      href="{% url 'proveedor:editar' proveedor.id %}"><i class="fa fa-edit"></i>
+                </a>
+                <a type="button" class="btn btn-outline-danger btn-sm btn-round" data-toggle="tooltip"
+                       title="Eliminar Datos"
+                      href="{% url 'proveedor:eliminar' proveedor.id %}"><i class="fa fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+
+        {% endfor %}
+</tbody>
+{% endblock %}

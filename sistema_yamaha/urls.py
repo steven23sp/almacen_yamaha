@@ -20,6 +20,7 @@ from app.cliente.url import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('cliente/', include('app.cliente.url', namespace='cliente'))
+    path('cliente/', include('app.cliente.url', namespace='cliente')),
+    path('proveedor/', include('app.proveedor.url', namespace='proveedor'))
 
 ]

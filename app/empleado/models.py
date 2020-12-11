@@ -1,4 +1,3 @@
-import cargo as cargo
 from django.db import models
 from django.forms import model_to_dict
 from app.cargo.models import cargo
