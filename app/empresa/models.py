@@ -24,6 +24,4 @@ class empresa(models.Model):
         verbose_name = 'empresa'
         verbose_name_plural = 'empresas'
         ordering = ['-nombre', '-ruc', '-direccion']
-from django.db import models
-
 # Create your models here.

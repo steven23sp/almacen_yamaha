@@ -4,7 +4,6 @@ from app.cliente.form import clienteForm
 from app.cliente.models import cliente
 from django.views.generic import *
 
-
 # Create your views here.
 class cliente_list(ListView):
     model = cliente
@@ -26,12 +25,12 @@ class cliente_create(CreateView):
     success_url = reverse_lazy('cliente:lista')
 
 
-def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
-    context['title'] = 'Registro de Cliente'
-    context['url'] = reverse_lazy('cliente:lista')
-    context['entidad'] = 'Cliente'
-    return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Registro de Cliente'
+        context['url'] = reverse_lazy('cliente:lista')
+        context['entidad'] = 'Cliente'
+        return context
 
 
 class cliente_update(UpdateView):
@@ -58,5 +57,6 @@ class cliente_delete(DeleteView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Eliminacion de Cliente'
         context['entidad'] = 'Cliente'
+        context['url'] = reverse_lazy('cliente:lista')
 
         return context

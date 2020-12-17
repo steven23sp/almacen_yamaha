@@ -26,12 +26,12 @@ class proveedor_create(CreateView):
     success_url = reverse_lazy('proveedor:lista')
 
 
-def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
-    context['title'] = 'Registro de Proveedores'
-    context['url'] = reverse_lazy('proveedor:lista')
-    context['entidad'] = 'Proveedores'
-    return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Registro de Proveedores'
+        context['url'] = reverse_lazy('proveedor:lista')
+        context['entidad'] = 'Proveedores'
+        return context
 
 
 class proveedor_update(UpdateView):
@@ -58,5 +58,6 @@ class proveedor_delete(DeleteView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Eliminacion de Proveedor'
         context['entidad'] = 'Proveedor'
+        context['url'] = reverse_lazy('proveedor:lista')
 
         return context

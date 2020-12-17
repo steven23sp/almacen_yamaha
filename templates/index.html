@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+
+{% block conten %}
+    <div class="row">
+
+        <div class="col-lg-3 col-9">
+            <!-- small card -->
+            <div class="small-box bg-gradient-secondary">
+                <div class="inner">
+                    <h3>150</h3>
+
+                    <p>Clientes</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <a href="{% url 'cliente:lista' %}" class="small-box-footer">
+                    Mas Informacion <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-9">
+            <!-- small card -->
+            <div class="small-box bg-gradient-blue">
+                <div class="inner">
+                    <h3>150</h3>
+
+                    <p>Proveedores</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <a href="{% url 'proveedor:lista' %}" class="small-box-footer">
+                    Mas Informacion <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-9">
+            <!-- small card -->
+            <div class="small-box bg-gradient-green">
+                <div class="inner">
+                    <h3>150</h3>
+
+                    <p>Marca</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-tag"></i>
+                </div>
+                <a href="{% url 'marca:lista' %}" class="small-box-footer">
+                    Mas Informacion <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-9">
+            <!-- small card -->
+            <div class="small-box bg-gradient-purple">
+                <div class="inner">
+                    <h3>150</h3>
+
+                    <p>Modelo</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <a href="{% url 'modelo:lista' %}" class="small-box-footer">
+                    Mas Informacion <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-9">
+            <!-- small card -->
+            <div class="small-box bg-gradient-yellow">
+                <div class="inner">
+                    <h3>150</h3>
+
+                    <p>Empleados</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-user-alt"></i>
+                </div>
+                <a href="{% url 'empleado:lista' %}" class="small-box-footer">
+                    Mas Informacion <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-9">
+            <!-- small card -->
+            <div class="small-box bg-gradient-olive">
+                <div class="inner">
+                    <h3>150</h3>
+
+                    <p>Cargos</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-address-book"></i>
+                </div>
+                <a href="{% url 'cargo:lista' %}" class="small-box-footer">
+                    Mas Informacion <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-9">
+            <!-- small card -->
+            <div class="small-box bg-gradient-orange">
+                <div class="inner">
+                    <h3>1</h3>
+
+                    <p>Empresa</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-university"></i>
+                </div>
+                <a href="#" class="small-box-footer">
+                    Mas Informacion <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-3 col-9">
+            <!-- small card -->
+            <div class="small-box bg-gradient-danger">
+                <div class="inner">
+                    <h3>?</h3>
+
+                    <p>Productos</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-truck"></i>
+                </div>
+                <a href="#" class="small-box-footer">
+                    Mas Informacion <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+    <div class="col-lg-3 col-9">
+            <!-- small card -->
+            <div class="small-box bg-gradient-gray-dark">
+                <div class="inner">
+                    <h3>?</h3>
+
+                    <p>Ventas</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <a href="#" class="small-box-footer">
+                    Mas Informacion <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+    <div class="col-lg-3 col-9">
+            <!-- small card -->
+            <div class="small-box bg-gradient-teal">
+                <div class="inner">
+                    <h3>?</h3>
+
+                    <p>Compras</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-cart-plus"></i>
+                </div>
+                <a href="#" class="small-box-footer">
+                    Mas Informacion <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+    <div class="col-lg-3 col-9">
+            <!-- small card -->
+            <div class="small-box bg-gradient-teal">
+                <div class="inner">
+                    <h3>?</h3>
+
+                    <p>Gastos</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-money-bill-alt"></i>
+                </div>
+                <a href="#" class="small-box-footer">
+                    Mas Informacion <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+    <div class="col-lg-3 col-9">
+            <!-- small card -->
+            <div class="small-box bg-gradient-teal">
+                <div class="inner">
+                    <h3>?</h3>
+
+                    <p>Inventario</p>
+                </div>
+                <div class="icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <a href="#" class="small-box-footer">
+                    Mas Informacion <i class="fas fa-arrow-circle-right"></i>
+                </a>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

@@ -1,0 +1,189 @@
+{% extends 'prueba/base2.html' %}
+{% block conten %}
+    <div class="row">
+        <div class="col-lg-3 col-6">
+            <div class="card card-secondary collapsed-card">
+                <div class="card-header">
+                    <h3 class="card-title">Cliente</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <a href="{% url 'cliente:crear' %}" class="fa fa-plus">Nuevo Cliente</a> <br>
+                    <a href="{% url 'cliente:lista' %}" class="fa fa-table">Listado de Cliente</a>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="card card-purple collapsed-card">
+                <div class="card-header">
+                    <h3 class="card-title">Empleado</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <a href="#" class="fa fa-plus"> Nuevo Empleado</a>
+                    <a href="#" class="fa fa-table"> Listado de Empleado</a>
+
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="card card-orange collapsed-card">
+                <div class="card-header">
+                    <h3 class="card-title">Asistencia</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <a href="#" class="fa fa-plus"> Asistencias</a>
+                    <a href="#" class="fa fa-table"> Listado de Asistencias</a>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="card card-green collapsed-card">
+                <div class="card-header">
+                    <h3 class="card-title">Proveedor</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <a href="{% url 'proveedor:crear' %}" class="fa-user-alt"> Nuevo Proveedor</a>
+                    <a href="{% url 'proveedor:lista' %}" class="fa fa-table"> Listado de Proveedores</a>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="card card-gray-dark collapsed-card">
+                <div class="card-header">
+                    <h3 class="card-title">Zona</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <a href="#" class="fa fa-user-alt"> Nueva Zona</a>
+                    <a href="#" class="fa fa-table"> Listado de Zonas</a>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="card card-blue collapsed-card">
+                <div class="card-header">
+                    <h3 class="card-title">Categoria</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <a href="#" class="fa fa-user-alt"> Nuevo Categoria</a>
+                    <a href="#" class="fa fa-table"> Listado de Categorias</a>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="card card-cyan collapsed-card">
+                <div class="card-header">
+                    <h3 class="card-title">Equipo y Maquinaria</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <a href="#" class="fa fa-user-alt"> Nuevo Equipo
+                        y Maquinaria</a>
+                    <a href="#" class="fa fa-table"> Listado de
+                        Equipo y Maquinaria</a>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="card card-yellow collapsed-card">
+                <div class="card-header">
+                    <h3 class="card-title">Labor</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <a href="#" class="fa fa-user-alt"> Nueva Labor</a>
+                    <a href="#" class="fa fa-table"> Listado de Labores</a>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="card card-yellow collapsed-card">
+                <div class="card-header">
+                    <h3 class="card-title">Insumo</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <!-- /.card-tools -->
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <a href="#" class="fa fa-user-alt"> Nueva Insumo</a>
+                    <a href="#" class="fa fa-table"> Listado de Insumos</a>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

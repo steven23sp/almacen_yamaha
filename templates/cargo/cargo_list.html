@@ -1,0 +1,41 @@
+{% extends 'list.html' %}
+{% block table %}
+    <thead>
+    <tr>
+        <!--<th class="center">
+            <label class="pos-rel">
+                <input type="checkbox" class="ace"/>
+                <span class="lbl"></span>
+            </label>
+        </th> -->
+        <th>Nombre</th>
+        <th>Sueldo</th>
+        <th>Opciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for cargo in object_list %}
+        <tr>
+            <!--<td class="center">
+                <label class="pos-rel">
+                    <input type="checkbox" class="ace"/>
+                    <span class="lbl"></span>
+                </label>
+            </td> -->
+            <td>{{ cargo.nombre }}</td>
+            <td>{{ cargo.sueldo }}</td>
+            <td>
+                <a type="button" class="btn btn-outline-success btn-sm btn-round" data-toggle="tooltip"
+                       title="Editar Datos"
+                      href="{% url 'cargo:editar' cargo.id %}"><i class="fa fa-edit"></i>
+                </a>
+                <a type="button" class="btn btn-outline-danger btn-sm btn-round" data-toggle="tooltip"
+                       title="Eliminar Datos"
+                      href="{% url 'cargo:eliminar' cargo.id %}"><i class="fa fa-trash"></i>
+                </a>
+            </td>
+        </tr>
+
+        {% endfor %}
+</tbody>
+{% endblock %}
