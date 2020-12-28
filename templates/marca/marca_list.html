@@ -1,5 +1,9 @@
 {% extends 'list.html' %}
 {% block table %}
+    <div class="card-header">
+        <a href="{{ nuevo }}" class="btn btn-primary btn-sm">
+            <i class="fa fa-plus" aria-hidden="true"></i> Nuevo Registro
+        </a>
     <thead>
     <tr>
         <!--<th class="center">
@@ -36,4 +40,5 @@
 
         {% endfor %}
 </tbody>
+    </div>
 {% endblock %}

@@ -1,9 +1,5 @@
 {% extends 'list.html' %}
 {% block table %}
-    <div class="card-header">
-        <a href="{{ nuevo }}" class="btn btn-primary btn-sm">
-            <i class="fa fa-plus" aria-hidden="true"></i> Nuevo Registro
-        </a>
     <thead>
     <tr>
         <!--<th class="center">
@@ -12,13 +8,19 @@
                 <span class="lbl"></span>
             </label>
         </th> -->
-
+        <th>Ruc</th>
         <th>Nombre</th>
+        <th>Ciudad</th>
+        <th>Direccion</th>
+        <th>Telefono</th>
+        <th>Correo</th>
+        <th>Iva</th>
+        <th>Indice</th>
         <th>Opciones</th>
     </tr>
     </thead>
     <tbody>
-    {% for modelo in object_list %}
+    {% for empresa in object_list %}
         <tr>
             <!--<td class="center">
                 <label class="pos-rel">
@@ -26,20 +28,26 @@
                     <span class="lbl"></span>
                 </label>
             </td> -->
-            <td>{{ modelo.nombre }}</td>
+            <td>{{ empresa.ruc }}</td>
+            <td>{{ empresa.nombre }}</td>
+            <td>{{ empresa.ciudad }}</td>
+            <td>{{ empresa.direccion }}</td>
+            <td>{{ empresa.telefono }}</td>
+            <td>{{ empresa.correo }}</td>
+            <td>{{ empresa.iva }}</td>
+            <td>{{ empresa.indice }}</td>
             <td>
                 <a type="button" class="btn btn-outline-success btn-sm btn-round" data-toggle="tooltip"
                        title="Editar Datos"
-                      href="{% url 'modelo:editar' modelo.id %}"><i class="fa fa-edit"></i>
+                      href="{% url 'empresa:editar' empresa.id %}"><i class="fa fa-edit"></i>
                 </a>
                 <a type="button" class="btn btn-outline-danger btn-sm btn-round" data-toggle="tooltip"
                        title="Eliminar Datos"
-                      href="{% url 'modelo:eliminar' modelo.id %}"><i class="fa fa-trash"></i>
+                      href="{% url 'empresa:eliminar' empresa.id %}"><i class="fa fa-trash"></i>
                 </a>
             </td>
         </tr>
 
         {% endfor %}
 </tbody>
-    </div>
 {% endblock %}

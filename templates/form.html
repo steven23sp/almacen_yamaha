@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block conten %}
     <form method="post" action=".">
-
         {% csrf_token %}
-
         {{ form.as_p }}
         {{ form.media }}
         <div class="card-footer">
@@ -18,8 +17,8 @@
     <script>
         {% if form.errors %}
             var errores = '';
-            {% for fied in form %}
-                {% for error in fied.errors %}
+            {% for field in form %}
+                {% for error in field.errors %}
                     errores += '{{ error }} \n';
                 {% endfor %}
             {% endfor %}
@@ -30,15 +29,29 @@
             })
         {% endif %}
 
-    </script>
-    <script>
-        $(function () {
-            $('#datetimepicker').datetimepicker({
-                format: 'L',
-                icono: {
-                    date: "fa fa-calendar"
+        $('form').on('submit', function (e) {
+            e.preventDefault();
+            var parameters = $(this).serializeArray();
+            $.ajax({
+                url: window.location.pathname,
+                type: 'POST',
+                data: parameters,
+                dataType: 'json'
+            }).done(function (data) {
+                console.log(data);
+                if (!data.hasOwnProperty('error')) {
+                    location.href = '{{ list_url }}';
+                    return false;
                 }
+                message_error(data.error);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                alert(textStatus + ': ' + errorThrown);
+            }).always(function (data) {
+
             });
         });
+
+        alert_jquery();
+
     </script>
 {% endblock %}

@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 
 from app.proveedor.form import proveedorForm
 from app.proveedor.models import proveedor
@@ -9,6 +11,10 @@ from django.views.generic import *
 class proveedor_list(ListView):
     model = proveedor
     template_name = 'proveedor/proveedor_list.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -25,6 +31,9 @@ class proveedor_create(CreateView):
     template_name = 'proveedor/proveedor_form.html'
     success_url = reverse_lazy('proveedor:lista')
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -40,6 +49,10 @@ class proveedor_update(UpdateView):
     template_name = 'proveedor/proveedor_form.html'
     success_url = reverse_lazy('proveedor:lista')
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Edicion de Proveedores'
@@ -53,6 +66,10 @@ class proveedor_delete(DeleteView):
     form_class = proveedorForm
     template_name = 'form_delete.html'
     success_url = reverse_lazy('proveedor:lista')
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

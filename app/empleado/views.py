@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 
 from app.empleado.form import empleadoForm
 from app.empleado.models import empleado
@@ -8,6 +10,10 @@ from django.views.generic import *
 class empleado_list(ListView):
     model = empleado
     template_name = 'empleado/empleado_list.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -24,6 +30,9 @@ class empleado_create(CreateView):
     template_name = 'empleado/empleado_form.html'
     success_url = reverse_lazy('empleado:lista')
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -39,6 +48,10 @@ class empleado_update(UpdateView):
     template_name = 'empleado/empleado_form.html'
     success_url = reverse_lazy('empleado:lista')
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Edicion de Empleado'
@@ -52,6 +65,10 @@ class empleado_delete(DeleteView):
     form_class = empleadoForm
     template_name = 'form_delete.html'
     success_url = reverse_lazy('empleado:lista')
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app.apps.AppConfig',
+    'widget_tweaks',
 
     #sistema
     'app.cargo',
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'app.proveedor',
     'app.tipo_gasto',
     'app.venta',
+    'app.login',
 
 
 
@@ -147,3 +149,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static",)
 
 ]
+
+LOGIN_REDIRECT_URL = '/'
+
+LOGOUT_REDIRECT_URL ='/login'
+
+LOGIN_URL ='/login'
