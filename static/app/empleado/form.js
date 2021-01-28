@@ -1,5 +1,5 @@
 $(document).ready(function () {
-   validar_stilo();
+    validar_stilo();
     $("#form").validate({
         rules: {
             nombres: {
@@ -74,7 +74,19 @@ $(document).ready(function () {
         });
         $(this).val(changue);
     });
-     $('.select2').select2({
+    $('#id_aoellidos').keyup(function () {
+        var changue = $(this).val().replace(/\b\w/g, function (l) {
+            return l.toUpperCase()
+        });
+        $(this).val(changue);
+    });
+    $('#id_direccion').keyup(function () {
+        var changue = $(this).val().replace(/\b\w/g, function (l) {
+            return l.toUpperCase()
+        });
+        $(this).val(changue);
+    });
+    $('.select2').select2({
         theme: "bootstrap4",
         language: 'es'
     });

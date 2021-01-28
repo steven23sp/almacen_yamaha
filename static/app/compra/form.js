@@ -181,7 +181,7 @@ $(function () {
             var tr = datatable.cell($(this).closest('td, li')).index();
             compras.items.producto[tr.row].cantidad = cantidad;
             compras.calculate();
-            $('td:eq(6)', datatable.row(tr.row).node()).html('$' + compra.items.producto[tr.row].subtotal.toFixed(2));
+            $('td:eq(6)', datatable.row(tr.row).node()).html('$' + compras.items.producto[tr.row].subtotal.toFixed(2));
         });
     $('#save').on('click', function () {
         if ($('select[name="proveedor"]').val() === "") {

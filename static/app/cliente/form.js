@@ -70,5 +70,11 @@ $(document).ready(function () {
         });
         $(this).val(changue);
     });
+    $('#id_direccion').keyup(function () {
+        var changue = $(this).val().replace(/\b\w/g, function (l) {
+            return l.toUpperCase()
+        });
+        $(this).val(changue);
+    });
 
 });

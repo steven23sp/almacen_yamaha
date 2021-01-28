@@ -37,8 +37,8 @@ function submit_with_ajax(url, title, content, parameters, callback) {
                         type: 'POST',
                         data: parameters,
                         dataType: 'json',
-                        processData: false,
-                        contentType: false,
+                        // processData: true,
+                        // contentType: false,
                     }).done(function (data) {
 
                         if (!data.hasOwnProperty('error')) {
@@ -64,7 +64,7 @@ function submit_with_ajax(url, title, content, parameters, callback) {
 
 function validar_stilo() {
     jQuery.validator.addMethod("lettersonly", function (value, element) {
-        return this.optional(element) || /^[a-z," "]+$/i.test(value);
+        return this.optional(element) || /^[a-z," ",ñ]+$/i.test(value);
     }, "Solo puede ingresar letras y espacios");
 
 
@@ -121,6 +121,30 @@ function menssaje_error(title, content, icon, callback) {
             info: {
                 text: '<i class="fas fa-check"></i> Ok',
                 btnClass: 'btn-blue'
+            },
+        }
+    });
+    setTimeout(function () {
+        // some point in future.
+        obj.close();
+    }, 3000);
+}
+
+function menssajeok(title, content, icon,  callback) {
+    var obj = $.confirm({
+        theme: 'supervan',
+        icon: 'fa fa-smile-o',
+        title: title,
+        type: 'red',
+        content: content,
+        draggable: true,
+        buttons: {
+            info: {
+                text: '<i class="fas fa-check"></i> Ok',
+                btnClass: 'btn-blue',
+                action: function () {
+
+                }
             },
         }
     });

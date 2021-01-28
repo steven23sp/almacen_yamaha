@@ -9,11 +9,16 @@ from django.views.generic import *
 
 from app.compra.form import compraForm
 from app.compra.models import *
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 from app.inventario.models import inventario
 from app.mixin import usuariomixin
 
+import os
+from django.conf import settings
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from django.contrib.staticfiles import finders
 
 # Create your views here.
 
@@ -114,3 +119,7 @@ class compra_create(LoginRequiredMixin, usuariomixin, CreateView):
         context['entidad'] = 'Compra'
         context['action'] = 'add'
         return context
+
+class pdfcompra(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse('Hola')
