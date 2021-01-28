@@ -1,19 +1,43 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
+from app.mixin import usuariomixin
 from app.modelo.form import modeloForm
 from app.modelo.models import modelo
 from django.views.generic import *
 
 # Create your views here.
-class modelo_list(ListView):
+class modelo_list(LoginRequiredMixin,usuariomixin,ListView):
     model = modelo
-    template_name = 'cargo/cargo_list.html'
+    template_name = 'modelo/modelo_list.html'
 
-    @method_decorator(login_required)
+    @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'searchdata':
+                data = []
+                for i in modelo.objects.all():
+                    data.append(i.toJSON())
+            elif action == 'delete':
+                pk = request.POST['id']
+                cli = modelo.objects.get(pk=pk)
+                cli.delete()
+                data['resp'] = True
+            else:
+                data['error'] = 'Ha ocurrido un error'
+        except Exception as e:
+            print(e)
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -24,49 +48,81 @@ class modelo_list(ListView):
         return context
 
 
-class modelo_create(CreateView):
+class modelo_create(LoginRequiredMixin,usuariomixin,CreateView):
     model = modelo
     form_class = modeloForm
     template_name = 'modelo/modelo_form.html'
     success_url = reverse_lazy('modelo:lista')
 
-    @method_decorator(login_required)
+
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'add':
+                form = self.get_form()
+                data = form.save()
+                return HttpResponseRedirect(self.success_url)
+            else:
+                data['error'] = 'No ha ingresado a ninguna opción'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Registro de Modelo'
         context['url'] = reverse_lazy('modelo:lista')
         context['entidad'] = 'Modelo'
+        context['action'] = 'add'
         return context
 
 
-class modelo_update(UpdateView):
+class modelo_update(LoginRequiredMixin,usuariomixin,UpdateView):
     model = modelo
     form_class = modeloForm
     template_name = 'modelo/modelo_form.html'
     success_url = reverse_lazy('modelo:lista')
 
-    @method_decorator(login_required)
+    #@method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
         return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'edit':
+                form = self.get_form()
+                data = form.save()
+                return HttpResponseRedirect(self.success_url)
+            else:
+                data['error'] = 'No ha ingresado a ninguna opción'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Edicion de Modelo'
         context['url'] = reverse_lazy('modelo:lista')
         context['entidad'] = 'Modelo'
+        context['action'] = 'edit'
         return context
 
 
-class modelo_delete(DeleteView):
+class modelo_delete(LoginRequiredMixin,usuariomixin,DeleteView):
     model = modelo
     form_class = modeloForm
     template_name = 'form_delete.html'
     success_url = reverse_lazy('modelo:lista')
 
-    @method_decorator(login_required)
+    #@method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
@@ -75,5 +131,6 @@ class modelo_delete(DeleteView):
         context['title'] = 'Eliminacion de Modelo'
         context['entidad'] = 'Modelo'
         context['url'] = reverse_lazy('modelo:lista')
+        context['action'] = 'delete'
 
         return context

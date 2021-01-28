@@ -1,4 +1,5 @@
-{% extends 'list.html' %}
+{% extends 'bases/list.html' %}
+{% load static %}
 {% block table %}
    <div class="card-header">
         <a href="{{ nuevo }}" class="btn btn-primary btn-sm">
@@ -6,12 +7,6 @@
         </a>
     <thead>
     <tr>
-        <!--<th class="center">
-            <label class="pos-rel">
-                <input type="checkbox" class="ace"/>
-                <span class="lbl"></span>
-            </label>
-        </th> -->
         <th>Nombre</th>
         <th>Opciones</th>
     </tr>
@@ -41,4 +36,7 @@
         {% endfor %}
 </tbody>
    </div>
+{% endblock %}
+{% block scripts_extra %}
+    <script src="{% static 'app/tip_gasto/list.js' %}"></script>
 {% endblock %}

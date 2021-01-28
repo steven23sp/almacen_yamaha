@@ -1,4 +1,5 @@
-{% extends 'list.html' %}
+{% extends 'bases/list.html' %}
+{% load static %}
 {% block table %}
     <div class="card-header">
         <a href="{{ nuevo }}" class="btn btn-primary btn-sm">
@@ -41,4 +42,7 @@
         {% endfor %}
 </tbody>
     </div>
+{% endblock %}
+{% block scripts_extra %}
+    <script src="{% static 'app/marca/list.js' %}"></script>
 {% endblock %}

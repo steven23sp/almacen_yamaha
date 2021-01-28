@@ -19,19 +19,22 @@ from django.urls import path
 from app.cliente.url import *
 from app import views as views
 from app.login.views import *
-
+from app.venta.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', include('app.login.url'), name='login'),
     path('', views.menu, name='index'),
     path('empresa/', include('app.empresa.url', namespace='empresa')),
-    path('cliente/', include('app.cliente.url', namespace='cliente')),
+    path('cliente/', include('app.cliente.url')),
     path('cargo/', include('app.cargo.url', namespace='cargo')),
     path('empleado/', include('app.empleado.url', namespace='empleado')),
     path('marca/', include('app.marca.url', namespace='marca')),
     path('modelo/', include('app.modelo.url', namespace='modelo')),
-    #path('gasto/', include('app.gasto.url', namespace='gasto')),
+    path('gasto/', include('app.gasto.url', namespace='gasto')),
     path('tipo_gasto/', include('app.tipo_gasto.url', namespace='tipo_gasto')),
-    path('proveedor/', include('app.proveedor.url', namespace='proveedor'))
+    path('proveedor/', include('app.proveedor.url', namespace='proveedor')),
+    path('producto/', include('app.producto.url', namespace='producto')),
+    path('venta/', include('app.venta.url', namespace='venta')),
+    path('compra/', include('app.compra.url', namespace='compra'))
 
 ]

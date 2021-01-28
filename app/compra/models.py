@@ -3,7 +3,6 @@ from django.db import models
 from django.forms import model_to_dict
 
 from app.producto.models import producto
-#from apps.presentacion.models import presentacion
 from app.proveedor.models import proveedor
 
 estado = (
@@ -29,6 +28,7 @@ class compra(models.Model):
         item['subtotal'] = format(self.subtotal, '.2f')
         item['iva'] = format(self.iva, '.2f')
         item['total'] = format(self.total, '.2f')
+        item['estado'] = self.get_estado_display()
         return item
 
     class Meta:
@@ -42,14 +42,17 @@ class detalle_compra(models.Model):
     compra = models.ForeignKey(compra, on_delete=models.PROTECT)
     producto = models.ForeignKey(producto, on_delete=models.PROTECT)
     cantidad = models.IntegerField(default=1)
+    p_compra_actual = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
 
     def __str__(self):
         return '%s %s' % (self.compra, self.producto.nombre)
 
     def toJSON(self):
-        item = model_to_dict(self)
-        item['compra'] = self.compra.toJSON()
+        item = model_to_dict(self, exclude=['compra'])
+        #item['compra'] = self.compra.toJSON()
         item['producto'] = self.producto.toJSON()
+        item['p_compra_actual'] = format(self.p_compra_actual, '.2f')
+
         return item
 
     class Meta:

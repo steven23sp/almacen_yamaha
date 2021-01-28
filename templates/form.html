@@ -1,57 +1,102 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load widget_tweaks %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'lib/adminLTE/plugins/select2/css/select2.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'lib/adminLTE/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css' %}">
+{% endblock %}
 {% block conten %}
-    <form method="post" action=".">
-        {% csrf_token %}
-        {{ form.as_p }}
-        {{ form.media }}
-        <div class="card-footer">
-            <button type="submit" class="btn btn-warning btn-sm btn-flat">
-                <i class="fas fa-sync"></i> Guardar
-            </button>
-            <a href="{{ url }}" class="btn btn-info btn-sm btn-flat">
-                <i class="fas fa-times"></i> Cancelar
-            </a>
+    <form method="post" action="." enctype="multipart/form-data" id="form">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">
+                    {% if action == 'add' %}
+                        <i class="fas fa-plus"></i>
+                    {% else %}
+                        <i class="fas fa-edit"></i>
+                    {% endif %}
+
+                    {{ title }}
+                </h3>
+            </div>
+            <div class="card-body">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="{{ action }}">
+                {% if form.errors %}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        <h5><i class="icon fas fa-ban"></i> Ha ocurrido un error al querer guardar el registro</h5>
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                {% for field in form.visible_fields %}
+                    <div class="form-group">
+                        <label for="email">{{ field.label }}:</label>
+                        {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                    </div>
+                {% endfor %}
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary btn-sm btn-flat" style="color: white">
+                        <i class="fas fa-save"></i> Guardar
+                    </button>
+                    <a href="{{ url }}" class="btn btn-danger btn-sm btn-flat ">
+                        <i class="fas fa-times"></i> Cancelar
+                    </a>
+                </div>
+            </div>
         </div>
     </form>
-    <script>
-        {% if form.errors %}
-            var errores = '';
-            {% for field in form %}
-                {% for error in field.errors %}
-                    errores += '{{ error }} \n';
-                {% endfor %}
-            {% endfor %}
-            Swal.fire({
-                title: 'Error!',
-                text: errores,
-                icon: 'error',
-            })
-        {% endif %}
 
-        $('form').on('submit', function (e) {
-            e.preventDefault();
-            var parameters = $(this).serializeArray();
-            $.ajax({
-                url: window.location.pathname,
-                type: 'POST',
-                data: parameters,
-                dataType: 'json'
-            }).done(function (data) {
-                console.log(data);
-                if (!data.hasOwnProperty('error')) {
-                    location.href = '{{ list_url }}';
-                    return false;
-                }
-                message_error(data.error);
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                alert(textStatus + ': ' + errorThrown);
-            }).always(function (data) {
-
-            });
-        });
-
-        alert_jquery();
-
-    </script>
 {% endblock %}
+{% block scripts %}
+    {#     <script>#}
+    {#        {% if form.errors %}#}
+    {#            var errors = '';#}
+    {#            {% for field in form %}#}
+    {#                {% for error in field.errors %}#}
+    {#                    errors += '{{ error }}\n';#}
+    {#                {% endfor %}#}
+    {#            {% endfor %}#}
+    {#            {% for error in form.non_field_errors %}#}
+    {#                errors += '{{ error }}\n';#}
+    {#            {% endfor %}#}
+    {#            Swal.fire({#}
+    {#                title: 'Error!',#}
+    {#                text: errors,#}
+    {#                icon: 'error'#}
+    {#            });#}
+    {#        {% endif %}#}
+    {##}
+    {#        $('form').on('submit', function (e) {#}
+    {#            e.preventDefault();#}
+    {#            var parameters = new FormData(this);#}
+    {#            submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {#}
+    {#                location.href = '{{ url }}';#}
+    {#            });#}
+    {#        });#}
+    {##}
+    {#        $('.select2').select2()#}
+    {##}
+    {#        //Initialize Select2 Elements#}
+    {#        $('.select2bs4').select2({#}
+    {#            theme: 'bootstrap4'#}
+    {#        })#}
+    {#    </script>#}
+    <!-- Select2 -->
+    <script src="{% static 'lib/adminLTE/plugins/select2/js/select2.full.min.js' %}"></script>
+    <script src=" https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/additional-methods.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/additional-methods.min.js"></script>
+{% endblock %}
+
+
+
+

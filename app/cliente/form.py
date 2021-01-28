@@ -2,6 +2,8 @@ from django import forms
 from datetime import *
 from django.forms import SelectDateWidget, TextInput, NumberInput, EmailInput
 from .models import cliente
+
+
 class clienteForm(forms.ModelForm):
     # constructor
     def __init__(self, *args, **kwargs):
@@ -13,14 +15,17 @@ class clienteForm(forms.ModelForm):
                 'class': 'form-control'
             })
             self.fields['nombres'].widget = TextInput(
-                attrs={'placeholder': 'Ingrese el nombre del cliente', 'class': 'form-control form-rounded','autocomplete': 'off'})
+                attrs={'placeholder': 'Ingrese el nombre del cliente', 'class': 'form-control form-rounded',
+                       'autocomplete': 'off'})
             self.fields['numero_doc'].widget = TextInput(
-                attrs={'placeholder': 'Ingrese numero de documento', 'class': 'form-control form-rounded','autocomplete': 'off'})
+                attrs={'placeholder': 'Ingrese numero de documento', 'class': 'form-control form-rounded',
+                       'autocomplete': 'off'})
             self.fields['correo'].widget = EmailInput(
-                attrs={'placeholder': 'abc@correo.com', 'class': 'form-control form-rounded','autocomplete': 'off'})
+                attrs={'placeholder': 'abc@correo.com', 'class': 'form-control form-rounded', 'autocomplete': 'off'})
             self.fields['telefono'].widget.attrs['placeholder'] = 'Ingrese un numero de telefono'
             self.fields['direccion'].widget = TextInput(
-                attrs={'placeholder': 'Ingrese su direccion con maximo 50 caracteres', 'class': 'form-control form-rounded','autocomplete': 'off'})
+                attrs={'placeholder': 'Ingrese su direccion con maximo 50 caracteres',
+                       'class': 'form-control form-rounded', 'autocomplete': 'off'})
 
         # habilitar, desabilitar, y mas
 
@@ -50,3 +55,15 @@ class clienteForm(forms.ModelForm):
             'telefono': forms.TextInput(),
             'direccion': forms.TextInput()
         }
+
+    def save(self, commit=True):
+        data = {}
+        form = super()
+        try:
+            if form.is_valid():
+                form.save()
+            else:
+                data['error'] = form.errors
+        except Exception as e:
+            data['error'] = str(e)
+        return data

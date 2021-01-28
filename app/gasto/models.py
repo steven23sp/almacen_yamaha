@@ -8,7 +8,7 @@ from app.tipo_gasto.models import tipo_gasto
 
 
 class gasto(models.Model):
-    empresa = models.ForeignKey(empresa, on_delete=models.PROTECT)
+    #empresa = models.ForeignKey(empresa, on_delete=models.PROTECT)
     tipo_gasto = models.ForeignKey(tipo_gasto, on_delete=models.PROTECT)
     fecha = models.DateField(default=datetime.now)
     valor = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
@@ -19,7 +19,7 @@ class gasto(models.Model):
 
     def toJSON(self):
         item = model_to_dict(self)
-        item['empresa'] = self.empresa.toJSON()
+        #item['empresa'] = self.empresa.toJSON()
         item['tipo_gasto'] = self.tipo_gasto.toJSON()
         item['valor'] = format(self.valor, '.2f')
         return item

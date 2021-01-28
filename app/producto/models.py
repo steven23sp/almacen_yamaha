@@ -1,6 +1,7 @@
 from django.db import models
 from django.forms import model_to_dict
 
+from app.empresa.models import empresa
 from app.marca.models import marca
 from app.modelo.models import modelo
 
@@ -16,11 +17,18 @@ class producto(models.Model):
     def __str__(self):
         return '%s' % (self.nombre)
 
+    def pvp_cal(self):
+        ind = empresa.objects.first()
+        pvp = float(self.pvp) * (1+float(ind.indice))
+        return format(pvp, '.2f')
+
     def toJSON(self):
+
         item = model_to_dict(self)
         item['marca'] = self.marca.toJSON()
         item['modelo'] = self.modelo.toJSON()
-        item['pvp'] = format(self.pvp, '.2f')
+        item['pvp'] = self.pvp_cal()
+        item['cantidad'] = 1
         return item
 
     class Meta:

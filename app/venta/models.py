@@ -15,7 +15,6 @@ estado = (
 
 class venta(models.Model):
     cliente = models.ForeignKey(cliente, on_delete=models.PROTECT)
-    empleado = models.ForeignKey(empleado, on_delete=models.PROTECT)
     fecha_venta = models.DateField(default=datetime.now)
     subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
@@ -28,10 +27,10 @@ class venta(models.Model):
     def toJSON(self):
         item = model_to_dict(self)
         item['cliente'] = self.cliente.toJSON()
-        item['empleado'] = self.empleado.toJSON()
         item['subtotal'] = format(self.subtotal, '.2f')
         item['iva'] = format(self.iva, '.2f')
         item['total'] = format(self.total, '.2f')
+        item['estado'] = self.get_estado_display()
         return item
 
     class Meta:
@@ -44,12 +43,10 @@ class venta(models.Model):
 class detalle_venta(models.Model):
     venta = models.ForeignKey(venta, on_delete=models.PROTECT)
     producto = models.ForeignKey(producto, on_delete=models.PROTECT, null=True, blank=True, default=None)
-    pvp_actual = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, blank=True, null=True)
-    pvp_actual_s = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, blank=True, null=True)
-    cantidadp = models.IntegerField(default=0)
-    cantidads = models.IntegerField(default=0)
-    subtotalp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
-    subtotals = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
+    pvp = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, blank=True, null=True)
+    p_venta_actual = models.DecimalField(default=0.00, max_digits=9, decimal_places=2, blank=True, null=True)
+    cantidad = models.IntegerField(default=0)
+    subtotal = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
 
     def __str__(self):
         return '%s' % (self.venta)

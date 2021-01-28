@@ -1,4 +1,5 @@
-{% extends 'list.html' %}
+{% extends 'bases/list.html' %}
+{% load static %}
 {% block table %}
     <div class="card-header">
         <a href="{{ nuevo }}" class="btn btn-primary btn-sm">
@@ -24,35 +25,10 @@
     </tr>
     </thead>
     <tbody>
-    {% for empleado in object_list %}
-        <tr>
-            <!--<td class="center">
-                <label class="pos-rel">
-                    <input type="checkbox" class="ace"/>
-                    <span class="lbl"></span>
-                </label>
-            </td> -->
-            <td>{{ empleado.cedula }}</td>
-            <td>{{ empleado.nombres }}</td>
-            <td>{{ empleado.apellidos }}</td>
-            <td>{{ empleado.edad }}</td>
-            <td>{{ empleado.correo }}</td>
-            <td>{{ empleado.telefono }}</td>
-            <td>{{ empleado.direccion }}</td>
-            <td>{{ empleado.cargo }}</td>
-            <td>
-                <a type="button" class="btn btn-outline-success btn-sm btn-round" data-toggle="tooltip"
-                       title="Editar Datos"
-                      href="{% url 'empleado:editar' empleado.id %}"><i class="fa fa-edit"></i>
-                </a>
-                <a type="button" class="btn btn-outline-danger btn-sm btn-round" data-toggle="tooltip"
-                       title="Eliminar Datos"
-                      href="{% url 'empleado:eliminar' empleado.id %}"><i class="fa fa-trash"></i>
-                </a>
-            </td>
-        </tr>
 
-        {% endfor %}
 </tbody>
     </div>
+{% endblock %}
+{% block scripts_extra %}
+<script src="{% static 'app/empleado/list.js' %}"></script>
 {% endblock %}

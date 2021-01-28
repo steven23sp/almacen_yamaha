@@ -3,12 +3,9 @@
 
 {% block head %}
     <link rel="stylesheet" href="{% static 'lib/adminLTE/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
-    <link rel="stylesheet" href="{% static 'lib/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'lib/adminLTE/plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
 {% endblock %}
-
- {% block extra %}
-
- {% endblock %}
 
 {% block conten %}
 
@@ -20,34 +17,25 @@
         </table>
     </div>
     <div class="card-footer">
-        <button type="button" class="btn btn-warning btn-sm btn-flat"
+        <button type="button" class="btn btn-secondary btn-sm btn-flat" style="color: white"
                 onclick="location.reload();">
             <i class="fas fa-sync"></i> Actualizar
         </button>
     </div>
 
-
 {% endblock %}
 {% block scripts %}
-    <script type="text/javascript" src="{% static 'lib/dataTables/jQuery-3.3.1/jquery-3.3.1.js' %}"></script>
-    <script type="text/javascript" src="{% static 'lib/dataTables/jQuery-3.3.1/jquery-3.3.1.min.js' %}"></script>
     <script src="{% static 'lib/adminLTE/plugins/datatables/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'lib/adminLTE/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
     <script src="{% static 'lib/adminLTE/plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
     <script src="{% static 'lib/adminLTE/plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
-    <script>
-        $.noConflict();
-        jQuery(document).ready(function ($) {
-            $('#example1').DataTable({
-                responsive: true,
-                autoWidth: false,
-                language: {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json"
-                },
+    <script src="{% static 'lib/adminLTE/plugins/select2/js/select2.full.min.js' %}"></script>
 
-            });
-        });
-        // Code that uses other library's $ can follow here.
-    </script>
-
+    <script src="{% static 'lib/moment-2.25.3/moment-with-locales.js' %}"></script>
+    <!--tempusdominus-->
+    <script src="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js' %}"></script>
+    <script src="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
+    <script src="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
 {% endblock %}
+
+

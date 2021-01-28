@@ -7,3 +7,4 @@ def menu(request):
         'title': 'Menu Principal', 'entidad': 'Menu Principal'
     }
     return render(request, '../../sistema_yamaha/templates/index.html', data)
+    #return render(request, 'bases/base.html', data)

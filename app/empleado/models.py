@@ -8,7 +8,7 @@ class empleado(models.Model):
     nombres = models.CharField(max_length=50)
     apellidos = models.CharField(max_length=50)
     cedula = models.CharField(max_length=10)
-    edad = models.IntegerField(default=0)
+    edad = models.IntegerField(default=18)
     correo = models.CharField(max_length=50, null=True, blank=True)
     telefono = models.CharField(max_length=10)
     direccion = models.CharField(max_length=50)
@@ -19,6 +19,7 @@ class empleado(models.Model):
 
     def toJSON(self):
         item = model_to_dict(self)
+        item['cargo'] = self.cargo.toJSON()
         return item
 
     class Meta:
