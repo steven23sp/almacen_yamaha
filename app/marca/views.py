@@ -1,7 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 from app.marca.form import marcaForm
 from app.marca.models import marca
@@ -15,9 +17,29 @@ class marca_list(LoginRequiredMixin,usuariomixin,ListView):
     model = marca
     template_name = 'marca/marca_list.html'
 
-    #@method_decorator(login_required)
+    @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'searchdata':
+                data = []
+                for i in marca.objects.all():
+                    data.append(i.toJSON())
+            elif action == 'delete':
+                pk = request.POST['id']
+                cli = marca.objects.get(pk=pk)
+                cli.delete()
+                data['resp'] = True
+            else:
+                data['error'] = 'Ha ocurrido un error'
+        except Exception as e:
+            print(e)
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

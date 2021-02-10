@@ -20,7 +20,6 @@ class cliente_list(LoginRequiredMixin, usuariomixin, ListView):
     model = cliente
     template_name = 'cliente/cliente_list.html'
 
-
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)

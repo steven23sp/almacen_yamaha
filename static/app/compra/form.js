@@ -153,6 +153,55 @@ $(function () {
         }
     });
 
+    // agregar proveedor modal envento click boton
+    $('#btnaddproveedor').on('click', function () {
+        //presentar modal de proveedor
+        $('#mymodalproveedor').modal('show');
+    });
+
+    $('#formproveedor').on('submit', function (e) {
+        e.preventDefault();
+        var parameters = new FormData(this);
+        var isvalid = $(this).valid();
+        if (isvalid) {
+            parameters.append('action', 'add_compra');
+            submit_with_ajax('/proveedor/crear/', 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function (response) {
+
+                $('#mymodalproveedor').modal('hide');
+                var newOption = new Option(response.proveedor['full'], response.proveedor['id'], false, true);
+                        $('select[name="proveedor"]').append(newOption).trigger('change');
+            });
+        }
+
+    });
+
+    //buscar cliente
+    $('select[name="proveedor"]').select2({
+        theme: "bootstrap4",
+        language: 'es',
+        allowClear: true,
+        ajax: {
+            delay: 250,
+            type: 'POST',
+            url: window.location.pathname,
+            data: function (params) {
+                var queryParameters = {
+                    term: params.term,
+                    action: 'search_proveedor'
+                }
+                return queryParameters;
+            },
+            processResults: function (data) {
+                return {
+                    results: data
+
+                };
+            },
+        },
+        placeholder: 'Ingrese una descripción',
+        minimumInputLength: 1,
+    });
+
     $('.btnRemoveAll').on('click', function () {
         if (compras.items.producto.length === 0) return false;
         borrar_todo_alert('Alerta de Eliminación',

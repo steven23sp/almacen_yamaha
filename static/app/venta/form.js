@@ -201,8 +201,14 @@ $(function () {
         var parameters = new FormData();
         parameters.append('action', 'add');
         parameters.append('venta', JSON.stringify(venta.items));
-        submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
-            location.href = '/venta/lista/';
+        submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters,
+            function (response) {
+            printpdf('Alerta!', '¿Desea generar el comprobante en PDF?', function () {
+                    window.open('/venta/printpdf/' + response['id'], '_blank');
+                    location.href = '/venta//lista/';
+                }, function () {
+                    location.href = '/venta//lista/';
+                })
         });
     });
     venta.list();

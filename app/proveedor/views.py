@@ -55,7 +55,7 @@ class proveedor_create(LoginRequiredMixin, usuariomixin, CreateView):
     template_name = 'proveedor/proveedor_form.html'
     success_url = reverse_lazy('proveedor:lista')
 
-    # @method_decorator(login_required)
+    @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
@@ -64,9 +64,19 @@ class proveedor_create(LoginRequiredMixin, usuariomixin, CreateView):
         try:
             action = request.POST['action']
             if action == 'add':
-                form = self.get_form()
-                data = form.save()
-                return HttpResponseRedirect(self.success_url)
+                form = self.form_class(request.POST)
+                if form.is_valid():
+                    form.save()
+                    return HttpResponseRedirect(self.success_url)
+                else:
+                    data['error'] = form.errors
+            elif action == 'add_compra':
+                form = self.form_class(request.POST)
+                if form.is_valid():
+                    pr = form.save()
+                    data['proveedor'] = pr.toJSON()
+                else:
+                    data['error'] = form.errors
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:
@@ -98,9 +108,13 @@ class proveedor_update(LoginRequiredMixin, usuariomixin, UpdateView):
         try:
             action = request.POST['action']
             if action == 'edit':
-                form = self.get_form()
-                data = form.save()
-                return HttpResponseRedirect(self.success_url)
+                inst = proveedor.objects.get(pk=self.kwargs.get('pk', 0))
+                form = self.form_class(request.POST, instance=inst)
+                if form.is_valid:
+                    form.save()
+                    return HttpResponseRedirect(self.success_url)
+                else:
+                    data['error'] = form.erros
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:

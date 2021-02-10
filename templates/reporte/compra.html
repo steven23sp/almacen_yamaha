@@ -1,0 +1,28 @@
+{% extends 'bases/list.html' %}
+{% load static %}
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'lib/adminLTE/plugins/daterangerpiker/daterangerpiker.css' %}">
+{% endblock %}
+{% block table %}
+
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Fecha Compra</th>
+        <th>Proveedor</th>
+        <th>Subtotal</th>
+        <th>Total</th>
+
+
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+
+{% endblock %}
+{% block scripts_extra %}
+    <script src="{% static 'app/compra/reporte_list.js' %}"></script>
+    <script src="{% static 'lib/adminLTE/plugins/daterangerpiker/daterangerpiker.js' %}"></script>
+     <script src="{% static 'lib/moment-2.25.3/moment-with-locales.js' %}"></script>
+{% endblock %}

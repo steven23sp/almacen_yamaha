@@ -19,8 +19,12 @@ class proveedor(models.Model):
     def __str__(self):
         return '%s' % self.nombres
 
+    def get_full_name(self):
+        return '{}/ {} / {}'.format(self.nombres, self.razon_social, self.numero_doc)
+
     def toJSON(self):
         item = model_to_dict(self)
+        item['full'] = self.get_full_name()
         return item
 
     class Meta:

@@ -8,9 +8,10 @@ from django.views.decorators.csrf import csrf_exempt
 from app.empleado.form import empleadoForm
 from app.empleado.models import empleado
 from django.views.generic import *
+from app.mixin import usuariomixin
 
 # Create your views here.
-from app.mixin import usuariomixin
+
 
 
 class empleado_list(LoginRequiredMixin,usuariomixin,ListView):

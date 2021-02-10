@@ -5,7 +5,7 @@
 //        $.each(obj, function (key, value) {
 //            html += '<li>' + key + ': ' + value + '</li>';
 //        });
- //       html += '</ul>';
+//       html += '</ul>';
 //    } else {
 //        html = '<p>' + obj + '</p>';
 //    }
@@ -33,19 +33,64 @@ function submit_with_ajax(url, title, content, parameters, callback) {
                 btnClass: 'btn-primary',
                 action: function () {
                     $.ajax({
-                        url: window.location.pathname,
+                        dataType: 'JSON',
                         type: 'POST',
+                        url: url,
+                        processData: false,
+                        contentType: false,
                         data: parameters,
-                        dataType: 'json',
-                        // processData: true,
-                        // contentType: false,
                     }).done(function (data) {
-
                         if (!data.hasOwnProperty('error')) {
-                            callback();
+                            callback(data);
                             return false;
                         }
-                        menssaje_error(data.error);
+                        menssaje_error('Error', data.error, 'fas fa-exclamation-circle');
+
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        alert(textStatus + ': ' + errorThrown);
+                    });
+                }
+            },
+            danger: {
+                text: "No",
+                btnClass: 'btn-red',
+                action: function () {
+
+                }
+            },
+        }
+    })
+}
+
+
+function submit_with_ajax_other(url, title, content, parameters, callback) {
+    $.confirm({
+        theme: 'material',
+        title: title,
+        icon: 'fa fa-info',
+        content: content,
+        columnClass: 'small',
+        typeAnimated: true,
+        cancelButtonClass: 'btn-primary',
+        draggable: true,
+        dragWindowBorder: false,
+        buttons: {
+            info: {
+                text: "Si",
+                btnClass: 'btn-primary',
+                action: function () {
+                    $.ajax({
+                        dataType: 'JSON',
+                        type: 'POST',
+                        url: url,
+                        data: parameters,
+                    }).done(function (data) {
+                        if (!data.hasOwnProperty('error')) {
+                            callback(data);
+                            return false;
+                        }
+                        menssaje_error('Error', data.error, 'fas fa-exclamation-circle');
+
                     }).fail(function (jqXHR, textStatus, errorThrown) {
                         alert(textStatus + ': ' + errorThrown);
                     });
@@ -63,10 +108,6 @@ function submit_with_ajax(url, title, content, parameters, callback) {
 }
 
 function validar_stilo() {
-    jQuery.validator.addMethod("lettersonly", function (value, element) {
-        return this.optional(element) || /^[a-z," ",ñ]+$/i.test(value);
-    }, "Solo puede ingresar letras y espacios");
-
 
     $.validator.setDefaults({
         errorClass: 'invalid-feedback',
@@ -130,7 +171,7 @@ function menssaje_error(title, content, icon, callback) {
     }, 3000);
 }
 
-function menssajeok(title, content, icon,  callback) {
+function menssajeok(title, content, icon, callback) {
     var obj = $.confirm({
         theme: 'supervan',
         icon: 'fa fa-smile-o',
@@ -152,4 +193,33 @@ function menssajeok(title, content, icon,  callback) {
         // some point in future.
         obj.close();
     }, 3000);
+}
+
+function printpdf(title, content, callback, cancel) {
+    $.confirm({
+            theme: 'modern',
+            type: 'blue',
+            icon: 'fas fa-exclamation-circle',
+            title: title,
+            content: content,
+            columnClass: 'small',
+            draggable: true,
+            buttons: {
+                si: {
+                    text: '<i class="fas fa-check"></i> Si',
+                    btnClass: 'btn-blue',
+                    action: function () {
+                        callback();
+                    }
+                },
+                no: {
+                    text: '<i class="fas fa-times"></i> No',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        cancel();
+                    }
+                }
+            }
+        }
+    );
 }

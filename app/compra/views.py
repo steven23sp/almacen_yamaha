@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 import json
 from django.db import transaction
+from django.db.models import Q
 
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -9,16 +10,20 @@ from django.views.generic import *
 
 from app.compra.form import compraForm
 from app.compra.models import *
-from django.http import JsonResponse, HttpResponse
+from app.proveedor.models import *
+from app.proveedor.form import *
+from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 
 from app.inventario.models import inventario
 from app.mixin import usuariomixin
+from app.empresa.models import *
 
 import os
 from django.conf import settings
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from django.contrib.staticfiles import finders
+
 
 # Create your views here.
 
@@ -39,7 +44,7 @@ class compra_list(LoginRequiredMixin, usuariomixin, ListView):
                 for i in compra.objects.all():
                     data.append(i.toJSON())
             elif action == 'detalle':
-                data= []
+                data = []
                 for i in detalle_compra.objects.filter(compra_id=request.POST['id']):
                     data.append(i.toJSON())
             else:
@@ -56,6 +61,7 @@ class compra_list(LoginRequiredMixin, usuariomixin, ListView):
         context['url'] = reverse_lazy('compra:lista')
         context['entidad'] = 'Compra'
         return context
+
 
 class compra_create(LoginRequiredMixin, usuariomixin, CreateView):
     model = compra
@@ -79,6 +85,7 @@ class compra_create(LoginRequiredMixin, usuariomixin, CreateView):
                     item = i.toJSON()
                     item['value'] = i.nombre
                     data.append(item)
+                print(data)
             elif action == 'add':
                 with transaction.atomic():
                     compras = json.loads(request.POST['compra'])
@@ -105,7 +112,18 @@ class compra_create(LoginRequiredMixin, usuariomixin, CreateView):
                             inv.compra_id = c.id
                             inv.producto_id = int(i['id'])
                             inv.save()
-
+            elif action == 'search_proveedor':
+                data = []
+                term = request.POST['term']
+                prov = proveedor.objects.filter(
+                    Q(nombres__icontains=term) | Q(razon_social__icontains=term) | Q(numero_doc__icontains=term))[0:10]
+                for i in prov:
+                    item = i.toJSON()
+                    item['text'] = i.get_full_name()
+                    data.append(item)
+            elif action == 'create_proveedor':
+                frm = proveedorForm(request.POST)
+                data = frm.save()
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:
@@ -118,8 +136,57 @@ class compra_create(LoginRequiredMixin, usuariomixin, CreateView):
         context['url'] = reverse_lazy('compra:lista')
         context['entidad'] = 'Compra'
         context['action'] = 'add'
+        context['frmproveedor'] = proveedorForm
         return context
+
 
 class pdfcompra(View):
     def get(self, request, *args, **kwargs):
-        return HttpResponse('Hola')
+        try:
+            template = get_template('compra/compra_fact.html')
+            context = {
+                'title': 'Comprobante de Compra',
+                'sale': compra.objects.get(pk=self.kwargs['pk']),
+                'empresa': empresa.objects.get(id=1),
+
+            }
+            html = template.render(context)
+            response = HttpResponse(context_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+            pisa_status = pisa.CreatePDF(html, dest=response)
+            return response
+        except:
+            pass
+        return HttpResponseRedirect(reverse_lazy('compra:lista'))
+
+
+class reporte(TemplateView):
+    template_name = 'reporte/compra.html'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'searchdetalle':
+                data = []
+                for i in compra.objects.all():
+                    data.append(i.toJSON())
+            elif action == 'detalle':
+                data = []
+                for i in detalle_compra.objects.filter(compra_id=request.POST['id']):
+                    data.append(i.toJSON())
+            else:
+                data['error'] = 'Ha ocurrido un error'
+        except Exception as e:
+            print(e)
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Reporte de Compras'
+        return context

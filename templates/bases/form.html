@@ -51,49 +51,34 @@
 
 {% endblock %}
 {% block scripts %}
-    {#     <script>#}
-    {#        {% if form.errors %}#}
-    {#            var errors = '';#}
-    {#            {% for field in form %}#}
-    {#                {% for error in field.errors %}#}
-    {#                    errors += '{{ error }}\n';#}
-    {#                {% endfor %}#}
-    {#            {% endfor %}#}
-    {#            {% for error in form.non_field_errors %}#}
-    {#                errors += '{{ error }}\n';#}
-    {#            {% endfor %}#}
-    {#            Swal.fire({#}
-    {#                title: 'Error!',#}
-    {#                text: errors,#}
-    {#                icon: 'error'#}
-    {#            });#}
-    {#        {% endif %}#}
-    {##}
-    {#        $('form').on('submit', function (e) {#}
-    {#            e.preventDefault();#}
-    {#            var parameters = new FormData(this);#}
-    {#            submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {#}
-    {#                location.href = '{{ url }}';#}
-    {#            });#}
-    {#        });#}
-    {##}
-    {#        $('.select2').select2()#}
-    {##}
-    {#        //Initialize Select2 Elements#}
-    {#        $('.select2bs4').select2({#}
-    {#            theme: 'bootstrap4'#}
-    {#        })#}
-    {#    </script>#}
+    <script>
+        {#        {% if form.errors %}#}
+        {#            var errors = '';#}
+        {#            {% for field in form %}#}
+        {#                {% for error in field.errors %}#}
+        {#                    errors += '{{ error }}\n';#}
+        {#                {% endfor %}#}
+        {#            {% endfor %}#}
+        {#            {% for error in form.non_field_errors %}#}
+        {#                errors += '{{ error }}\n';#}
+        {#            {% endfor %}#}
+        {#            Swal.fire({#}
+        {#                title: 'Error!',#}
+        {#                text: errors,#}
+        {#                icon: 'error'#}
+        {#            });#}
+        {#        {% endif %}#}
+        {##}
+        /*$('form').on('submit', function (e) {
+            e.preventDefault();
+            var parameters = new FormData(this);
+            submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function () {
+                location.href = '';
+            });
+        }); */
+    </script>
     <!-- Select2 -->
-    <script src="{% static 'lib/adminLTE/plugins/select2/js/select2.full.min.js' %}"></script>
-    <script src=" https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/additional-methods.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/additional-methods.min.js"></script>
-    <script src="{% static 'lib/moment-2.25.3/moment-with-locales.js' %}"></script>
-    <script src="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.js' %}"></script>
-    <script src="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.js' %}"></script>
-    <script src="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.js' %}"></script>
+
 {% endblock %}
 
 
