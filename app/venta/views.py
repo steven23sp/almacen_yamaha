@@ -4,7 +4,8 @@ import os
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.staticfiles import finders
 from django.db import transaction
-from django.db.models import Sum
+from django.db.models import Sum, Q, Count
+from django.db.models.functions import Coalesce
 from django.shortcuts import render
 from django.template.loader import get_template
 from django.urls import reverse_lazy
@@ -13,6 +14,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import *
 from xhtml2pdf import pisa
 
+from app.cliente.form import clienteForm
+from app.devolucion.models import devolucion
 from app.empresa.models import empresa
 from app.inventario.models import inventario
 
@@ -40,12 +43,27 @@ class venta_list(LoginRequiredMixin, usuariomixin, ListView):
             action = request.POST['action']
             if action == 'searchdetalle':
                 data = []
-                for i in venta.objects.all():
+                for i in self.model.objects.all():
                     data.append(i.toJSON())
             elif action == 'detalle':
                 data= []
                 for i in detalle_venta.objects.filter(venta_id=request.POST['id']):
                     data.append(i.toJSON())
+            elif action == 'devolucion':
+                data = []
+                venta = self.model.objects.get(id=request.POST['id'])
+                venta.estado = 0
+                venta.save()
+                dev = devolucion()
+                dev.venta_id = venta.id
+                dev.save()
+                for i in venta.detalle_venta_set.all():
+                    for a in inventario.objects.filter(producto_id=int(i.producto.id))[0:i.cantidad]:
+                        a.estado = 1
+                        a.save()
+                    # prod = producto.objects.get(id=i.producto.id)
+                    # # prod.stock += i.cantidad
+                    # prod.save()
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
@@ -60,7 +78,6 @@ class venta_list(LoginRequiredMixin, usuariomixin, ListView):
         context['url'] = reverse_lazy('venta:lista')
         context['entidad'] = 'Venta'
         return context
-
 
 class venta_create(LoginRequiredMixin, usuariomixin, CreateView):
     model = venta
@@ -79,11 +96,15 @@ class venta_create(LoginRequiredMixin, usuariomixin, CreateView):
             action = request.POST['action']
             if action == 'search_products':
                 data = []
-                prods = producto.objects.filter(nombre__icontains=request.POST['term'], stock__gte=1)
-                for i in prods:
-                    item = i.toJSON()
-                    item['value'] = i.nombre
-                    data.append(item)
+                prods = producto.objects.filter(nombre__icontains=request.POST['term'])
+                ids = json.loads(request.POST['ids'])
+                for i in prods.exclude(id__in=ids):
+                    stock = inventario.objects.filter(producto_id=i.id, estado=1).aggregate(r=Coalesce(Count('id'), 0)).get('r')
+                    if stock >= 1:
+                        item = i.toJSON()
+                        item['stock'] = stock
+                        item['value'] = i.nombre
+                        data.append(item)
             elif action == 'add':
                 get = empresa.objects.first()
                 with transaction.atomic():
@@ -101,18 +122,40 @@ class venta_create(LoginRequiredMixin, usuariomixin, CreateView):
                         det.producto_id = i['id']
                         det.cantidad = int(i['cantidad'])
                         det.subtotal = float(i['subtotal'])
-                        p = producto.objects.get(pk=i['id'])
+                        # p = producto.objects.get(pk=i['id'])
                         det.p_venta_actual = float(i['pvp'])
-                        p.stock = p.stock - int(i['cantidad'])
-                        p.save()
+                        # p.stock -= int(i['cantidad'])
+                        # p.save()
                         det.save()
                         inv = inventario.objects.filter(producto_id=int(i['id']), estado=1)
-                        for it in inv:
+                        for it in inv[0:int(i['cantidad'])]:
                             x = inventario.objects.get(pk=it.id)
                             x.estado = 0
-                            x.venta_id = c.id
                             x.save()
                     data['id'] = c.id
+            elif action == 'search_cliente':
+                data = []
+                term = request.POST['term']
+                prov = cliente.objects.filter(
+                    Q(nombres__icontains=term) | Q(numero_doc__icontains=term))[0:10]
+                for i in prov:
+                    item = i.toJSON()
+                    item['text'] = i.get_full_name()
+                    data.append(item)
+            elif action == 'create_cliente':
+                frm = clienteForm(request.POST)
+                data = frm.save()
+            elif action == 'detalle':
+                data = []
+                porducto = producto.objects.all()
+                ids = json.loads(request.POST['ids'])
+                for i in porducto.exclude(id__in=ids):
+                    stock = inventario.objects.filter(producto_id=i.id, estado=1).aggregate(r=Coalesce(Count('id'), 0)).get('r')
+                    if stock >= 1:
+                            item = i.toJSON()
+                            item['stock'] = stock
+                            item['value'] = i.nombre
+                            data.append(item)
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:
@@ -127,6 +170,7 @@ class venta_create(LoginRequiredMixin, usuariomixin, CreateView):
         context['entidad'] = 'Venta'
         context['action'] = 'add'
         context['empresa'] = empresa.objects.first()
+        context['frmcliente'] = clienteForm
         return context
 
 
@@ -182,7 +226,7 @@ class printpdf(View):
 
     def get(self, request, *args, **kwargs):
         try:
-            template = get_template('reporte/report.html')
+            template = get_template('venta/venta_fact.html')
             context = {'title': 'Comprobante de Venta',
                        'sale': venta.objects.get(pk=self.kwargs['pk']),
                        'empresa': empresa.objects.first(),
@@ -190,7 +234,7 @@ class printpdf(View):
                        }
             html = template.render(context)
             response = HttpResponse(content_type='application/pdf')
-            response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+            response['Content-Disposition'] = 'attachment; filename="report_venta.pdf"'
             pisa_status = pisa.CreatePDF(html, dest=response, link_callback=self.link_callback)
             return response
         except:
@@ -200,7 +244,7 @@ class printpdf(View):
 
 class venta_report_total(LoginRequiredMixin, usuariomixin, ListView):
     model = venta
-    template_name = 'venta/venta_report.html'
+    template_name = 'reporte/venta.html'
 
     @method_decorator(csrf_exempt)
     def dispatch(self, request, *args, **kwargs):
@@ -259,6 +303,6 @@ class venta_report_total(LoginRequiredMixin, usuariomixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'reporte de Ventas totales'
+        context['title'] = 'Reporte de Ventas totales'
         context['entidad'] = 'Venta'
         return context

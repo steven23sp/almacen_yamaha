@@ -31,7 +31,7 @@ $(function () {
                 orderable: false,
                 render: function (data, type, row) {
                     var detalle = '<a type="button" class="btn btn-outline-success btn-sm btn-round" data-toggle="tooltip"title="Ver Detalle Compra" rel="detalle""><i class="fa fa-search"></i></a> ';
-                    pdf = '<a type="button" class="btn btn-outline-danger btn-sm btn-round" data-toggle="tooltip" title="Imprimir PDF" rel="pdf"><i class="fa fa-trash"></i></a>';
+                    pdf = '<a type="button" class="btn btn-outline-danger btn-sm btn-round" href="/compra/factura/'+data+'" data-toggle="tooltip" title="Imprimir PDF" rel="pdf"><i class="fa fa-file-pdf"></i></a>';
                     return detalle + pdf;
                 },
             },

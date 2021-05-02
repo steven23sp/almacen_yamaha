@@ -12,31 +12,10 @@
     </tr>
     </thead>
     <tbody>
-    {% for tipo_gasto in object_list %}
-        <tr>
-            <!--<td class="center">
-                <label class="pos-rel">
-                    <input type="checkbox" class="ace"/>
-                    <span class="lbl"></span>
-                </label>
-            </td> -->
-            <td>{{ tipo_gasto.nombre }}</td>
-            <td>
-                <a type="button" class="btn btn-outline-success btn-sm btn-round" data-toggle="tooltip"
-                       title="Editar Datos"
-                      href="{% url 'tipo_gasto:editar' tipo_gasto.id %}"><i class="fa fa-edit"></i>
-                </a>
-                <a type="button" class="btn btn-outline-danger btn-sm btn-round" data-toggle="tooltip"
-                       title="Eliminar Datos"
-                      href="{% url 'tipo_gasto:eliminar' tipo_gasto.id %}"><i class="fa fa-trash"></i>
-                </a>
-            </td>
-        </tr>
 
-        {% endfor %}
 </tbody>
    </div>
 {% endblock %}
 {% block scripts_extra %}
-    <script src="{% static 'app/tip_gasto/list.js' %}"></script>
+    <script src="{% static 'app/tipo_gasto/list.js' %}"></script>
 {% endblock %}

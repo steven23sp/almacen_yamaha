@@ -40,8 +40,7 @@ INSTALLED_APPS = [
     'app.apps.AppConfig',
     'widget_tweaks',
     'tempus_dominus',
-
-    #sistema
+    ##################
     'app.cargo',
     'app.cliente',
     'app.compra',
@@ -57,6 +56,10 @@ INSTALLED_APPS = [
     'app.venta',
     'app.login',
     'app.user',
+    'app.area',
+    'app.estante',
+    'app.ubicacion',
+    'app.devolucion',
 
 
 
@@ -154,7 +157,7 @@ STATICFILES_DIRS = [
 
 ]
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, '/media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 LOGIN_REDIRECT_URL = '/'
 

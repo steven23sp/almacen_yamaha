@@ -27,7 +27,7 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a class="nav-link">
                         <i class="nav-icon fa fa-shopping-bag"></i>
                         <p>
                             Compras
@@ -48,9 +48,9 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> <!-- compras-->
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a class="nav-link">
                         <i class="nav-icon fa fa-user-alt"></i>
                         <p>
                             Cliente
@@ -71,9 +71,9 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> <!-- cliente-->
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a class="nav-link">
                         <i class="nav-icon fa fa-users"></i>
                         <p>
                             Empleados
@@ -94,9 +94,9 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> <!-- empleados-->
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a class="nav-link">
                         <i class="nav-icon fa fa-tags"></i>
                         <p>
                             Proveedor
@@ -117,11 +117,11 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> <!-- proveedor-->
 
 
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a class="nav-link">
                         <i class="nav-icon fa fa-address-book"></i>
                         <p>
                             Cargos
@@ -142,10 +142,10 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> <!-- cargos-->
 
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a class="nav-link">
                         <i class="nav-icon fa fa-cart-plus"></i>
                         <p>
                             Venta
@@ -166,9 +166,9 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> <!-- ventas-->
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a class="nav-link">
                         <i class="nav-icon fa fa-money-bill-alt"></i>
                         <p>
                             Gastos
@@ -189,7 +189,7 @@
                             </a>
                         </li>
                     </ul>
-                     <ul class="nav nav-treeview">
+                    <ul class="nav nav-treeview">
                         <li class="nav-item has-treeview">
                             <a class="nav-link">
                                 <i class="fa fa-money-bill-wave nav-icon"></i>
@@ -215,9 +215,32 @@
                             </ul>
                         </li>
                     </ul>
-                </li> <!-- level-->
+                </li> <!-- level--> <!--gasto-->
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a class="nav-link">
+                        <i class="nav-icon fa fa-align-center"></i>
+                        <p>
+                            Inventario
+                            <i class="right fa fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{% url 'inventario:lista' %}" class="nav-link">
+                                <i class="fa fa-table nav-icon"></i>
+                                <p>Listado</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'inventario:crear' %}" class="nav-link">
+                                <i class="fa fa-plus-circle nav-icon"></i>
+                                <p>Ingreso</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li> <!-- inventario-->
+                <li class="nav-item has-treeview">
+                    <a class="nav-link">
                         <i class="nav-icon fa fa-user-circle"></i>
                         <p>
                             Usuarios
@@ -238,7 +261,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li> <!--usuarios-->
                 <li class="nav-item has-treeview">
                     <a class="nav-link">
                         <i class="nav-icon fa fa-box"></i>
@@ -310,9 +333,9 @@
                             </ul>
                         </li>
                     </ul>
-                </li> <!-- level-->
+                </li> <!-- level--> <!--producto-->
                 <li class="nav-item has-treeview">
-                    <a href="#" class="nav-link">
+                    <a class="nav-link">
                         <i class="nav-icon fa fa-table"></i>
                         <p>
                             Reportes
@@ -327,13 +350,37 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{% url 'cliente:crear' %}" class="nav-link">
+                            <a href="{% url 'venta:reporte_total' %}" class="nav-link">
                                 <i class="fa fa-cart-plus nav-icon"></i>
                                 <p>Venta</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{% url 'cliente:reporte' %}" class="nav-link">
+                                <i class="fa fa-user nav-icon"></i>
+                                <p>Cliente</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'producto:reporte' %}" class="nav-link">
+                                <i class="fa fa-box nav-icon"></i>
+                                <p>Stock Producto</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'gasto:reporte_fijo' %}" class="nav-link">
+                                <i class="fa fa-money-bill nav-icon"></i>
+                                <p>Gasto Fijos</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'gasto:reporte_variable' %}" class="nav-link">
+                                <i class="fa fa-money-bill-alt nav-icon"></i>
+                                <p>Gastos Variables</p>
+                            </a>
+                        </li>
                     </ul>
-                </li>
+                </li> <!--reportes-->
 
 
             </ul>

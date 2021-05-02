@@ -43,7 +43,7 @@ $(function () {
         var data = datatable.row(tr.row).data();
         var parametros = {'id': data.id};
         parametros['action'] = 'delete'
-        submit_with_ajax(window.location.pathname, 'Alerta de Eliminacion!',
+        submit_with_ajax_other(window.location.pathname, 'Alerta de Eliminacion!',
             'Esta seguro que desea borrar este gasto', parametros, function (){
             datatable.ajax.reload(null, false);
             })

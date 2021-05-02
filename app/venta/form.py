@@ -1,11 +1,11 @@
 from django.forms import *
 from app.venta.models import *
 
-
 class ventaForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['cliente'].widget.attrs['autofocus'] = True
+        self.fields['cliente'].queryset = cliente.objects.none()
 
     class Meta:
         model = venta
@@ -13,7 +13,7 @@ class ventaForm(ModelForm):
         widgets = {
             'cliente': Select(attrs={
                 'class': 'form-control select2',
-                'sytle': 'with 100%',
+
 
             }),
             'fecha_venta': DateInput(format='%Y-%m-%d',

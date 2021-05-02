@@ -1,7 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 import json
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Q, Sum
+from django.db.models.functions import Coalesce
 
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -85,7 +86,6 @@ class compra_create(LoginRequiredMixin, usuariomixin, CreateView):
                     item = i.toJSON()
                     item['value'] = i.nombre
                     data.append(item)
-                print(data)
             elif action == 'add':
                 with transaction.atomic():
                     compras = json.loads(request.POST['compra'])
@@ -95,7 +95,6 @@ class compra_create(LoginRequiredMixin, usuariomixin, CreateView):
                     c.subtotal = float(compras['subtotal'])
                     c.iva = float(compras['iva'])
                     c.total = float(compras['total'])
-                    # c.estado =
                     c.save()
                     for i in compras['producto']:
                         det = detalle_compra()
@@ -104,14 +103,14 @@ class compra_create(LoginRequiredMixin, usuariomixin, CreateView):
                         det.cantidad = int(i['cantidad'])
                         p = producto.objects.get(pk=i['id'])
                         det.p_compra_actual = p.pvp
-                        p.stock = p.stock + int(i['cantidad'])
+                        p.stock += int(i['cantidad'])
                         p.save()
                         det.save()
-                        for a in range(0, i['cantidad']):
-                            inv = inventario()
-                            inv.compra_id = c.id
-                            inv.producto_id = int(i['id'])
-                            inv.save()
+                        # for a in range(0, i['cantidad']):
+                        #     inv = inventario()
+                        #     inv.compra_id = c.id
+                        #     inv.producto_id = int(i['id'])
+                        #     inv.save()
             elif action == 'search_proveedor':
                 data = []
                 term = request.POST['term']
@@ -124,6 +123,10 @@ class compra_create(LoginRequiredMixin, usuariomixin, CreateView):
             elif action == 'create_proveedor':
                 frm = proveedorForm(request.POST)
                 data = frm.save()
+            elif action == 'detalle':
+                data = []
+                for i in producto.objects.all():
+                    data.append(i.toJSON())
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:
@@ -141,19 +144,67 @@ class compra_create(LoginRequiredMixin, usuariomixin, CreateView):
 
 
 class pdfcompra(View):
+    def link_callback(self, uri, rel):
+        """
+        Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+        resources
+        """
+        result = finders.find(uri)
+        if result:
+            if not isinstance(result, (list, tuple)):
+                result = [result]
+            result = list(os.path.realpath(path) for path in result)
+            path = result[0]
+        else:
+            sUrl = settings.STATIC_URL  # Typically /static/
+            sRoot = settings.STATIC_ROOT  # Typically /home/userX/project_static/
+            mUrl = settings.MEDIA_URL  # Typically /media/
+            mRoot = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
+
+            if uri.startswith(mUrl):
+                path = os.path.join(mRoot, uri.replace(mUrl, ""))
+            elif uri.startswith(sUrl):
+                path = os.path.join(sRoot, uri.replace(sUrl, ""))
+            else:
+                return uri
+
+        # make sure that file exists
+        if not os.path.isfile(path):
+            raise Exception(
+                'media URI must start with %s or %s' % (sUrl, mUrl)
+            )
+        return path
+
+    # def pvp_cal(self, *args, **kwargs):
+    #     data = []
+    #     try:
+    #         result = Detalle_venta.objects.filter(venta_id=self.kwargs['pk']).values(
+    #             'inventario__produccion__producto_id',
+    #             'cantidad', 'pvp_actual', 'subtotal'). \
+    #             annotate(Count('inventario__produccion__producto_id'))
+    #         for i in result:
+    #             pb = Producto.objects.get(id=int(i['inventario__produccion__producto_id']))
+    #             item = {'producto': {'producto': pb.toJSON()}}
+    #             item['pvp'] = format(i['pvp_actual'], '.2f')
+    #             item['cantidad'] = i['cantidad']
+    #             item['subtotal'] = i['subtotal']
+    #             data.append(item)
+    #     except:
+    #         pass
+    #     return data
+
     def get(self, request, *args, **kwargs):
         try:
             template = get_template('compra/compra_fact.html')
-            context = {
-                'title': 'Comprobante de Compra',
-                'sale': compra.objects.get(pk=self.kwargs['pk']),
-                'empresa': empresa.objects.get(id=1),
-
-            }
+            context = {'title': 'Comprobante de Compra',
+                       'sale': compra.objects.get(pk=self.kwargs['pk']),
+                       'empresa': empresa.objects.first(),
+                       'icon': 'media/logo.png',
+                       }
             html = template.render(context)
-            response = HttpResponse(context_type='application/pdf')
-            response['Content-Disposition'] = 'attachment; filename="report.pdf"'
-            pisa_status = pisa.CreatePDF(html, dest=response)
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename="report_compra.pdf"'
+            pisa_status = pisa.CreatePDF(html, dest=response, link_callback=self.link_callback)
             return response
         except:
             pass
@@ -171,22 +222,86 @@ class reporte(TemplateView):
         data = {}
         try:
             action = request.POST['action']
-            if action == 'searchdetalle':
+            if action == 'search_report':
                 data = []
-                for i in compra.objects.all():
-                    data.append(i.toJSON())
-            elif action == 'detalle':
-                data = []
-                for i in detalle_compra.objects.filter(compra_id=request.POST['id']):
-                    data.append(i.toJSON())
+                start_date = request.POST.get('start_date', '')
+                end_date = request.POST.get('end_date', '')
+                search = compra.objects.all()
+                if len(start_date) and len(end_date):
+                    search = search.filter(fecha_compra__range=[start_date, end_date])
+                for s in search:
+                    data.append([
+                        s.id,
+                        s.fecha_compra.strftime('%Y-%m-%d'),
+                        s.proveedor.nombres,
+                        format(s.subtotal, '.2f'),
+                        format(s.iva, '.2f'),
+                        format(s.total, '.2f'),
+                    ])
+
+                subtotal = search.aggregate(r=Coalesce(Sum('subtotal'), 0)).get('r')
+                iva = search.aggregate(r=Coalesce(Sum('iva'), 0)).get('r')
+                total = search.aggregate(r=Coalesce(Sum('total'), 0)).get('r')
+
+                data.append([
+                    '---',
+                    '---',
+                    '---',
+                    format(subtotal, '.2f'),
+                    format(iva, '.2f'),
+                    format(total, '.2f'),
+                ])
+
             else:
                 data['error'] = 'Ha ocurrido un error'
         except Exception as e:
-            print(e)
             data['error'] = str(e)
         return JsonResponse(data, safe=False)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Reporte de Compras'
+        context['entity'] = 'Reportes'
+
+        return context
+
+
+# reporte de producto mediante modelo compras
+class reporte_producto(TemplateView):
+    template_name = 'reporte/producto.html'
+
+    @method_decorator(csrf_exempt)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            action = request.POST['action']
+            if action == 'search_report':
+
+                data = []
+                start_date = request.POST.get('start_date', '')
+                end_date = request.POST.get('end_date', '')
+                search = detalle_compra.objects.all()
+                if len(start_date) and len(end_date):
+                    search = search.filter(compra__fecha_compra__range=[start_date, end_date])
+                for s in search:
+                    data.append([
+                        s.id,
+                        s.compra.fecha_compra.strftime('%Y-%m-%d'),
+                        s.producto.nombre,
+                        s.cantidad,
+
+                    ])
+            else:
+                data['error'] = 'Ha ocurrido un error'
+        except Exception as e:
+            data['error'] = str(e)
+        return JsonResponse(data, safe=False)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Reporte de Productos'
+        context['entity'] = 'Reportes'
         return context

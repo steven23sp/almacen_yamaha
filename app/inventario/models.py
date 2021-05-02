@@ -6,6 +6,7 @@ from django.forms import model_to_dict
 from app.compra.models import compra
 from app.producto.models import producto
 from app.venta.models import venta
+from app.ubicacion.models import ubicacion
 
 ESTADO = (
     (1, 'En stock'),
@@ -19,11 +20,9 @@ SELECT = (
 
 class inventario(models.Model):
     compra = models.ForeignKey(compra, on_delete=models.PROTECT)
-    venta = models.ForeignKey(venta, on_delete=models.PROTECT, null=True, blank=True)
     producto = models.ForeignKey(producto, on_delete=models.PROTECT, null=True, blank=True)
-    # serie = models.CharField(max_length=13, unique=True, default=0)
     estado = models.IntegerField(choices=ESTADO, default=1)
-    # select = models.IntegerField(choices=SELECT, default=0)
+    ubicacion = models.ForeignKey(ubicacion, on_delete=models.PROTECT, null=True, blank=True)
 
     def __str__(self):
         return '%s' % self.producto.nombre
@@ -32,6 +31,7 @@ class inventario(models.Model):
         item = model_to_dict(self)
         item['compra'] = self.compra.toJSON()
         item['producto'] = self.producto.toJSON()
+        item['estado'] = self.get_estado_display()
         return item
 
     class Meta:

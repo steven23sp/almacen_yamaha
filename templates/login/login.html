@@ -1,7 +1,7 @@
 {% load static %}
 {% load widget_tweaks %}
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,18 +24,18 @@
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="#"><b>Admin</b>LTE</a>
+        <a href="#"><b>Sistema</b>Yamaha</a>
     </div>
     <!-- /.login-logo -->
     <div class="card">
         <div class="card-body login-card-body">
             <p class="login-box-msg">Registrese para iniciar Sesion</p>
 
-            <form action="." method="post">
+            <form action="." method="post" id="formlogin">
                 <input type="hidden" name="next" value="{{ next }}">
                 {% csrf_token %}
                 <div class="input-group mb-3">
-                    {{ form.username|add_class:'form-control' |attr:'autocomplete:off' |attr:'placeholder:Ingrese su usuario' }}
+                    {{ form.username|add_class:'form-control' |attr:'autocomplete:off' |attr:'placeholder:Ingrese su usuario'|attr:'name:username' }}
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-envelope"></span>
@@ -43,7 +43,7 @@
                     </div>
                 </div>
                 <div class="input-group mb-3">
-                    {{ form.password|add_class:'form-control' |attr:'autocomplete:off' |attr:'placeholder:Ingrese su contraseña' }}
+                    {{ form.password|add_class:'form-control' |attr:'autocomplete:off' |attr:'placeholder:Ingrese su contraseña' |attr:'name:password' }}
                     <div class="input-group-append">
                         <div class="input-group-text">
                             <span class="fas fa-lock"></span>
@@ -60,46 +60,29 @@
                     </div>
                     <!-- /.col -->
                 </div>
-                <script type="application/javascript">
-                    {% if form.errors %}
-                        var errors = '';
-                        {% for field in form %}
-                            {% for error in field.errors %}
-                                errors += '{{ error }}\n';
-                            {% endfor %}
-                        {% endfor %}
-                        {% for error in form.non_field.errors %}
-                            errors += '{{ error }} \n';
-                        {% endfor %}
-                        Swal.fire({
-                            title: 'Error!',
-                            text: errors,
-                            icon: 'error',
-                        })
-                    {% endif %}
-                </script>
+
             </form>
             <p class="mb-1">
                 <a href="forgot-password.html">Olvide mi contraseña</a>
             </p>
-            <!--
-            <p class="mb-0">
-                <a href="register.html" class="text-center">Register a new membership</a>
-            </p>
-            -->
 
         </div>
         <!-- /.login-card-body -->
     </div>
 </div>
 <!-- /.login-box -->
-
+<script src="{% static 'lib/js/function.js' %}"></script>
 <!-- jQuery -->
 <script src="{% static 'lib/adminLTE/plugins/jquery/jquery.min.js' %}"></script>
 <!-- Bootstrap 4 -->
 <script src="{% static 'lib/adminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <!-- AdminLTE App -->
 <script src="{% static 'lib/adminLTE/dist/js/adminlte.min.js' %}"></script>
+<!-- SweetAlert -->
+<script src="{% static 'lib/sweetalert/sweetalert2.all.min.js' %}"></script>
+
+<script src="{% static 'app/login.js' %}"></script>
+
 
 </body>
 </html>

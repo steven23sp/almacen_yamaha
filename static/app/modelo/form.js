@@ -19,6 +19,25 @@ $(document).ready(function () {
         },
     });
 
+     $("#formmodelo").validate({
+        rules: {
+            nombre: {
+                required: true,
+                minlength: 3,
+                maxlength: 50,
+                lettersonly: true,
+            },
+        },
+        messages: {
+            nombre: {
+                required: "Porfavor ingresar un nombre para el modelo",
+                minlength: "Debe ingresar al menos tres letras del modelo",
+                lettersonly: "Debe ingresar unicamente letras y espacios"
+            },
+
+        },
+    });
+
     $('#id_nombre').keyup(function () {
         var changue = $(this).val().replace(/\b\w/g, function (l) {
             return l.toUpperCase()

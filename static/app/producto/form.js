@@ -69,11 +69,59 @@ $(document).ready(function () {
         },
     });
 
+       // agregar marca modal envento click boton
+    $('#btnaddmarca').on('click', function () {
+        //presentar modal de proveedor
+        $('#mymodalmarca').modal('show');
+    });
+
+    $('#formmarca').on('submit', function (e) {
+        e.preventDefault();
+        var parameters = new FormData(this);
+        var isvalid = $(this).valid();
+        if (isvalid) {
+            parameters.append('action', 'add_marca');
+            submit_with_ajax('/marca/crear/', 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function (response) {
+
+                $('#mymodalmarca').modal('hide');
+                var newOption = new Option(response.marca['full'], response.marca['id'], false, true);
+                $('select[name="marca"]').append(newOption).trigger('change');
+            });
+        }
+
+    });
+
+       // agregar modelo modal envento click boton
+    $('#btnaddmodelo').on('click', function () {
+        //presentar modal de proveedor
+        $('#mymodalmodelo').modal('show');
+    });
+
+    $('#formmodelo').on('submit', function (e) {
+        e.preventDefault();
+        var parameters = new FormData(this);
+        var isvalid = $(this).valid();
+        if (isvalid) {
+            parameters.append('action', 'add_modelo');
+            submit_with_ajax('/modelo/crear/', 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function (response) {
+
+                $('#mymodalmodelo').modal('hide');
+                var newOption = new Option(response.modelo['full'], response.modelo['id'], false, true);
+                $('select[name="modelo"]').append(newOption).trigger('change');
+            });
+        }
+
+    });
+
     $('#id_nombre').keyup(function () {
         var changue = $(this).val().replace(/\b\w/g, function (l) {
             return l.toUpperCase()
         });
         $(this).val(changue);
+    });
+    $('.select2').select2({
+        theme: "bootstrap4",
+        language: 'es'
     });
 
 });

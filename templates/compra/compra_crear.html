@@ -25,7 +25,7 @@
                             <input type="text" class="form-control" name="search" placeholder="Ingrese un producto"
                                    autocomplete="of">
                             <span class="input-group-append">
-                                <button type="button" class="btn btn-danger"><i class="fa fa-times"></i></button>
+                                <button type="button" class="btn btn-outline-primary" id="buscar_producto"><i class="fa fa-search" title="Buscar Productos"></i></button>
                             </span>
                         </div>
                         <hr>
@@ -114,6 +114,7 @@
             </div>
         </div>
     </div>
+    <!-- modal proveddor-->
     <div class="modal fade" id="mymodalproveedor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
          aria-hidden="true">
         <form id="formproveedor" enctype="multipart/form-data" method="post">
@@ -145,6 +146,34 @@
             </div>
         </form>
 
+    </div>
+    <!-- modal productos-->
+    <div class="modal fade" id="mymodalproducto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+         aria-hidden="true">
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle"><i class="fas fa-cart-arrow-down"></i>Tabla de
+                        Productos</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table" id="tbldetalle">
+                        <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Stock</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
 {% block scripts_extra %}

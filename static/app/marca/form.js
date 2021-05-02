@@ -9,12 +9,6 @@ $(document).ready(function () {
                 lettersonly: true,
             },
 
-            sueldo: {
-                required: true,
-               // minlength: 10,
-                //maxlength: 10,
-                //digits: true
-            },
         },
         messages: {
             nombre: {
@@ -27,6 +21,26 @@ $(document).ready(function () {
             //   minlength: "El suedo debe tener al menos  1 digito",
                //digits: "Debe ingresar unicamente numeros",
                // maxlength: "El sueldo maximo 5 digitos",
+            },
+
+        },
+    });
+
+     $("#formmarca").validate({
+        rules: {
+            nombre: {
+                required: true,
+                minlength: 3,
+                maxlength: 50,
+                lettersonly: true,
+            },
+
+        },
+        messages: {
+            nombre: {
+                required: "Porfavor ingresar un nombre para la marca",
+                minlength: "Debe ingresar al menos tres letras para la marca",
+                lettersonly: "Debe ingresar unicamente letras y espacios"
             },
 
         },

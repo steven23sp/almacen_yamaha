@@ -10,12 +10,6 @@ from app.cliente.models import cliente
 from django.views.generic import *
 from app.mixin import usuariomixin
 
-
-# from django.http import JsonResponse
-
-# Create your views here.
-
-
 class cliente_list(LoginRequiredMixin, usuariomixin, ListView):
     model = cliente
     template_name = 'cliente/cliente_list.html'
@@ -59,6 +53,7 @@ class cliente_create(LoginRequiredMixin, usuariomixin, CreateView):
     template_name = 'cliente/cliente_form.html'
     success_url = reverse_lazy('cliente:lista')
 
+    @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
@@ -67,9 +62,17 @@ class cliente_create(LoginRequiredMixin, usuariomixin, CreateView):
         try:
             action = request.POST['action']
             if action == 'add':
-                form = self.get_form()
-                data = form.save()
-                return HttpResponseRedirect(self.success_url)
+                form = self.form_class(request.POST)
+                if form.is_valid():
+                    form.save()
+                    return HttpResponseRedirect(self.success_url)
+            elif action == 'add_venta':
+                form = self.form_class(request.POST)
+                if form.is_valid():
+                    pr = form.save()
+                    data['cliente'] = pr.toJSON()
+                else:
+                    data['error'] = form.errors
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:
@@ -146,3 +149,38 @@ class cliente_delete(LoginRequiredMixin, usuariomixin, DeleteView):
         context['action'] = 'delete'
 
         return context
+
+
+class report(LoginRequiredMixin, usuariomixin, ListView):
+    model = cliente
+    template_name = 'reporte/cliente.html'
+
+    @csrf_exempt
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        action = request.POST['action']
+        if action == 'report':
+            data = []
+            start_date = request.POST.get('start_date', '')
+            end_date = request.POST.get('end_date', '')
+            try:
+                if start_date == '' and end_date == '':
+                    query = cliente.objects.all()
+                else:
+                    query = cliente.objects.filter(fecha__range=[start_date, end_date])
+
+                for p in query:
+                    data.append(p.toJSON())
+            except:
+                pass
+            return JsonResponse(data, safe=False)
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['entidad'] = 'Clientes'
+        data['title'] = 'Reporte de Clientes'
+
+        return data

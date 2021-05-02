@@ -11,6 +11,11 @@ estado = (
 )
 
 
+inventario = (
+    (0, 'NO'),
+    (1, 'SI')
+)
+
 class compra(models.Model):
     fecha_compra = models.DateField(default=datetime.now)
     proveedor = models.ForeignKey(proveedor, on_delete=models.PROTECT)
@@ -18,6 +23,7 @@ class compra(models.Model):
     iva = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=9, decimal_places=2)
     estado = models.IntegerField(choices=estado, default=1)
+    inventario_estado = models.IntegerField(choices=inventario, default=0)
 
     def __str__(self):
         return '%s %s' % (self.fecha_compra, self.proveedor.nombres)
@@ -49,7 +55,7 @@ class detalle_compra(models.Model):
 
     def toJSON(self):
         item = model_to_dict(self, exclude=['compra'])
-        #item['compra'] = self.compra.toJSON()
+        item['compra'] = self.compra.toJSON()
         item['producto'] = self.producto.toJSON()
         item['p_compra_actual'] = format(self.p_compra_actual, '.2f')
 

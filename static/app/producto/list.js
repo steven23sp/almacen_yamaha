@@ -4,6 +4,7 @@ $(function () {
         autoWidth: false,
         destroy: true,
         deferRender: true,
+
         ajax: {
             url: window.location.pathname,
             type: 'POST',
@@ -22,6 +23,7 @@ $(function () {
             {"data": "descripcion"},
             {"data": "pvp"},
             {"data": "stock"},
+            {"data": "imagen"},
             {"data": "id"},
 
         ],
@@ -32,12 +34,21 @@ $(function () {
                 orderable: false,
                 render: function (data, type, row) {
                     var editar = '<a type="button" class="btn btn-outline-success btn-sm btn-round" data-toggle="tooltip"title="Editar Datos" href="/producto/editar/' + data + '"><i class="fa fa-edit"></i></a> ';
-                    borrar = '<a type="button" class="btn btn-outline-danger btn-sm btn-round" data-toggle="tooltip" title="Eliminar Datos" rel="delete"><i class="fa fa-trash"></i></a>';
+                    var borrar = '<a type="button" class="btn btn-outline-danger btn-sm btn-round" data-toggle="tooltip" title="Eliminar Datos" rel="delete"><i class="fa fa-trash"></i></a>';
                     return editar + borrar;
                 }
             },
             {
                 targets: [-2],
+                class: 'text-center',
+                orderable: false,
+                render: function (data, type, row) {
+                    return '<img src="' + data + '" width="50" height="50" class="img-circle elevation-2" alt="User Image">';
+                }
+            },
+
+            {
+                targets: [-3],
                 class: 'text-center',
                 orderable: false,
                 render: function (data, type, row) {
@@ -62,7 +73,7 @@ $(function () {
             var data = datatable.row(tr.row).data();
             var parametros = {'id': data.id};
             parametros['action'] = 'delete'
-            submit_with_ajax(window.location.pathname, 'Alerta de Eliminacion!',
+            submit_with_ajax_other(window.location.pathname, 'Alerta de Eliminacion!',
                 'Esta seguro que desea borrar este producto', parametros, function () {
                     datatable.ajax.reload(null, false);
                 })

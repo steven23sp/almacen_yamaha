@@ -20,6 +20,10 @@ from app.cliente.url import *
 from app import views as views
 from app.login.views import *
 from app.venta.views import *
+
+from django.conf import settings
+from django.conf.urls.static import static
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('login/', include('app.login.url'), name='login'),
@@ -36,6 +40,11 @@ urlpatterns = [
     path('producto/', include('app.producto.url', namespace='producto')),
     path('venta/', include('app.venta.url', namespace='venta')),
     path('compra/', include('app.compra.url', namespace='compra')),
-    path('usuario/', include('app.user.url', namespace='user'))
+    path('inventario/', include('app.inventario.url', namespace='inventario')),
+    path('usuario/', include('app.user.url', namespace='user')),
+    path('devolucion/', include('app.devolucion.url', namespace='devolucion')),
+    path('dashbord/', include('app.dashbord.url', namespace='dashbord'))
 
 ]
+
+urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

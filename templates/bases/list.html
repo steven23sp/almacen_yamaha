@@ -8,7 +8,11 @@
 {% endblock %}
 
 {% block conten %}
-
+    <div class="card-header">
+        <a href="{{ nuevo }}" class="btn btn-primary btn-sm">
+            <i class="fa fa-plus" aria-hidden="true"></i> Nuevo Registro
+        </a>
+    </div>
     <div class="table-responsive">
         <table id="example1" class="table table-striped  " style="width: 100%">
             {% block table %}

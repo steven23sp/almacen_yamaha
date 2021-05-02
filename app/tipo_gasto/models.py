@@ -8,8 +8,12 @@ class tipo_gasto(models.Model):
     def __str__(self):
         return '%s' % self.nombre
 
+    def get_full_name(self):
+        return '{}'.format(self.nombre)
+
     def toJSON(self):
         item = model_to_dict(self)
+        item['full'] = self.get_full_name()
         return item
 
     class Meta:

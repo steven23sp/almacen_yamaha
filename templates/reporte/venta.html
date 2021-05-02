@@ -1,0 +1,56 @@
+{% extends 'bases/list.html' %}
+{% load static %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/daterangepicker/daterangepicker.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'lib/datatables/Buttons-1.6.5/css/buttons.bootstrap4.css' %}"/>
+{% endblock %}
+{% block table %}
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                <div class="card-header">
+                    <label for="fecha"> Filtro de Fecha:</label>
+                    <input type="text" name="fecha" id="fecha" class="form-control form-control-sm input-sm">
+                </div>
+            </div>
+        </div>
+
+    <hr>
+    <thead>
+    <tr>
+        <th>Fecha Venta</th>
+        <th>Cliente</th>
+        <th>Subtotal</th>
+        <th>Iva</th>
+        <th>Total</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+    <tfoot>
+    <tr>
+        <th></th>
+        <th>Totales:</th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    </tfoot>
+{% endblock %}
+
+{% block scripts_extra %}
+    <script src="{% static 'app/venta/report_total.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/moment-2.25.3/moment.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/daterangepicker/daterangepicker.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/daterangepicker/spanish.js' %}"></script>
+     <!-- botones del datatable -->
+    <script type="text/javascript" src="{% static 'lib/datatables/JSZip-2.5.0/jszip.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/datatables/pdfmake-0.1.36/pdfmake.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/datatables/pdfmake-0.1.36/vfs_fonts.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/datatables/Buttons-1.6.5/js/dataTables.buttons.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/datatables/Buttons-1.6.5/js/buttons.bootstrap4.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/datatables/Buttons-1.6.5/js/buttons.html5.js' %}"></script>
+
+
+{% endblock %}

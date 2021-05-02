@@ -16,6 +16,7 @@ $(function () {
         language: {
             url: '//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json',
         },
+
         columns: [
             {"data": "nombres"},
             {"data": "numero_doc"},
@@ -44,7 +45,7 @@ $(function () {
             var tr = datatable.cell($(this).closest('td, li')).index();
             var data = datatable.row(tr.row).data();
             var parametros = {'id': data.id, 'action': 'delete'};
-            submit_with_ajax(window.location.pathname, 'Alerta de Eliminacion!',
+            submit_with_ajax_other(window.location.pathname, 'Alerta de Eliminacion!',
                 'Esta seguro que desea borrar este cliente', parametros, function () {
                     datatable.ajax.reload(null, false);
                 })

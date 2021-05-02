@@ -1,7 +1,6 @@
 from django.forms import *
 from app.compra.models import *
 
-
 class compraForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

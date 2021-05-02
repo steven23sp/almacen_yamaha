@@ -49,6 +49,9 @@ var compras = {
                 {"data": "pvp"},
                 {"data": "subtotal"},
             ],
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json',
+            },
             columnDefs: [
                 {
                     targets: [0],
@@ -159,6 +162,44 @@ $(function () {
         $('#mymodalproveedor').modal('show');
     });
 
+    $('#buscar_producto').on('click', function () {
+            $('#tbldetalle').DataTable({
+                responsive: true,
+                autoWidth: false,
+                destroy: true,
+                deferRender: true,
+                ajax: {
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'detalle',
+                        //'id': data.id
+                    },
+                    dataSrc: ""
+                },
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json',
+                },
+                columns: [
+                    {"data": "nombre"},
+                    //{"data": "producto.marca"},
+                    //{"data": "producto.modelo"},
+                    {"data": "stock"},
+                    //{"data": "subtotal"},
+
+                ],
+                columnDefs: [
+
+                    {
+                        targets: '_all',
+                        class: 'text-center',
+
+                    },
+                ]
+            })
+            $('#mymodalproducto').modal('show');
+        });
+
     $('#formproveedor').on('submit', function (e) {
         e.preventDefault();
         var parameters = new FormData(this);
@@ -169,13 +210,13 @@ $(function () {
 
                 $('#mymodalproveedor').modal('hide');
                 var newOption = new Option(response.proveedor['full'], response.proveedor['id'], false, true);
-                        $('select[name="proveedor"]').append(newOption).trigger('change');
+                $('select[name="proveedor"]').append(newOption).trigger('change');
             });
         }
 
     });
 
-    //buscar cliente
+    //buscar proveedor
     $('select[name="proveedor"]').select2({
         theme: "bootstrap4",
         language: 'es',
@@ -200,7 +241,7 @@ $(function () {
         },
         placeholder: 'Ingrese una descripción',
         minimumInputLength: 1,
-    });
+    })
 
     $('.btnRemoveAll').on('click', function () {
         if (compras.items.producto.length === 0) return false;
@@ -211,6 +252,7 @@ $(function () {
                 compras.list();
             });
     });
+
 
     //eliminar productos del detalle
     $('#tblProducts tbody')

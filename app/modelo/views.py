@@ -63,9 +63,17 @@ class modelo_create(LoginRequiredMixin,usuariomixin,CreateView):
         try:
             action = request.POST['action']
             if action == 'add':
-                form = self.get_form()
-                data = form.save()
+                form = self.form_class(request.POST)
+                if form.is_valid():
+                    form.save()
                 return HttpResponseRedirect(self.success_url)
+            elif action == 'add_modelo':
+                form = self.form_class(request.POST)
+                if form.is_valid():
+                    pr = form.save()
+                    data['modelo'] = pr.toJSON()
+                else:
+                    data['error'] = form.errors
             else:
                 data['error'] = 'No ha ingresado a ninguna opción'
         except Exception as e:

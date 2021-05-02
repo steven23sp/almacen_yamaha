@@ -37,6 +37,7 @@ class venta(models.Model):
         db_table = 'venta'
         verbose_name = 'venta'
         verbose_name_plural = 'ventas'
+        ordering = ['fecha_venta']
 #
 
 

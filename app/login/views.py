@@ -1,10 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect
+from django.contrib.auth.forms import AuthenticationForm
 from django.utils.decorators import method_decorator
 
 
 class LoginFormView (LoginView):
+    form_class = AuthenticationForm
     template_name = 'login/login.html'
 
     #@method_decorator(login_required)

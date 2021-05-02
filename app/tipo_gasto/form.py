@@ -13,7 +13,7 @@ class tipo_gastoForm(forms.ModelForm):
                 'class': 'form-control'
             })
             self.fields['nombre'].widget = TextInput(
-                attrs={'placeholder': 'Ingrese el nombre del cargo', 'class': 'form-control form-rounded','autocomplete': 'off'})
+                attrs={'placeholder': 'Ingrese el nombre del tipo de gasto', 'class': 'form-control form-rounded','autocomplete': 'off'})
 
         # habilitar, desabilitar, y mas
 

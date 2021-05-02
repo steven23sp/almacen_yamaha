@@ -28,8 +28,7 @@ $(document).ready(function () {
             },
             password: {
                 required: true,
-                minlength: 4,
-                maxlength: 50,
+
             },
             telefono: {
                 required: true,
@@ -66,8 +65,7 @@ $(document).ready(function () {
             },
             password: {
                 required: "Porfavor ingresar una contraseña",
-                minlength: "Debe ingresar al menos 4 caracteres para la contraseña",
-                lettersonly: "Debe ingresar unicamente letras y espacios"
+
             },
             telefono: {
                 required: "Porfavor ingresar un numero de telefono",

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <style>
     .img-invoice {
-        width: 50px;
+        width: 200px;
         text-align: center;
         margin: 0 auto;
     }
@@ -11,6 +11,16 @@
     .head {
         text-align: center;
         text-transform: uppercase;
+    }
+
+    .fact {
+        text-align: right;
+        text-transform: uppercase;
+        font-size: xx-large;
+    }
+
+    .n {
+        color: red;
     }
 
     #invoice thead tr th {
@@ -29,53 +39,72 @@
         padding: 0;
     }
 
-    .text-center{
+    .text-center {
         text-align: center;
+    }
+
+    table th {
+        color: #fff;
+        background-color: #1d4061;
     }
 </style>
 <body>
-
+<img src="{{ icon }}" class="img-invoice" alt="logo">
 <p class="head">
     <b>{{ empresa.nombre|upper }}</b><br>
     <b>RUC: {{ empresa.ruc }}</b><br>
     <b>TELF: {{ empresa.telefono }}</b>&nbsp;<b>EMAIL: {{ empresa.correo }}</b> <br>
     <b>DIR: {{ empresa.direccion|upper }}/ ECUADOR</b> <b></b>
 </p>
+<h1 class="head">
+    {{ title|upper }}</h1>
+<p class="fact">
+    <b>FACTURA N°:</b><br>
+    <b class="n">{{ sale.id|stringformat:"010d" }}</b>
+</p>
 <p>
 
-    <b>FECHA DE COMPRA:</b> {{ sale.compra.fecha_compra }}<br>
-    <b>PROVEEDOR:</b> {{ sale.compra.proveedor.nombres|upper }}<br>
+    <b>FECHA DE COMPRA:</b> {{ sale.fecha_compra }}<br>
+    <b>PROVEEDOR:</b> {{ sale.proveedor.nombres|upper }}<br>
+    <b>TIPO DOCUMENTO:</b> {{ sale.proveedor.get_tipo_doc_display }}<br>
+    <b>NUMERO:</b> {{ sale.proveedor.numero_doc }}<br>
 
 </p>
 <table id="invoice">
     <thead>
     <tr>
         <th style="width: 40%;">PRODUCTO</th>
+        <th style="width: 20%;">MARCA</th>
+        <th style="width: 20%;">MODELO</th>
         <th style="width: 10%;">CANT</th>
         <th style="width: 15%;">P.COMPRA</th>
-       <!-- <th style="width: 15%;">TOTAL</th> -->
+        <!-- <th style="width: 15%;">TOTAL</th> -->
     </tr>
     </thead>
     <tbody>
     {% for d in sale.detalle_compra_set.all %}
         <tr {% if forloop.first %}style="padding-top: 3px;" {% endif %}>
-            <td class="text-center">{{ d.producto.nombre }}</td>
+            <td>{{ d.producto.nombre }}</td>
+            <td>{{ d.producto.marca.nombre }}</td>
+            <td>{{ d.producto.modelo.nombre }}</td>
             <td class="text-center">{{ d.cantidad }}</td>
             <td class="text-center">${{ d.p_compra_actual }}</td>
 
         </tr>
+        <tr></tr>
+        <tr style="border-top: 1px solid black; padding-top: 4px;"></tr>
     {% endfor %}
     <tr style="border-top: 1px solid black; padding-top: 4px;">
         <td colspan="4"><b>SUBTOTAL</b></td>
-        <td style="text-align: right">{{ sale.compra.subtotal }}</td>
+        <td style="text-align: right">{{ sale.subtotal }}</td>
     </tr>
     <tr style="padding-top: 0px;">
         <td colspan="4"><b>IVA 12%</b></td>
-        <td style="text-align: right">{{ sale.compra.iva }}</td>
+        <td style="text-align: right">{{ sale.iva }}</td>
     </tr>
     <tr style="padding-top: 0px;">
         <td colspan="4"><b>TOTAL A PAGAR</b></td>
-        <td style="text-align: right">{{ sale.compra.total }}</td>
+        <td style="text-align: right">{{ sale.total }}</td>
     </tr>
     </tbody>
 </table>

@@ -55,6 +55,7 @@ class clienteForm(forms.ModelForm):
             'telefono': forms.TextInput(),
             'direccion': forms.TextInput()
         }
+        exclude=['fecha']
 
     def save(self, commit=True):
         data = {}

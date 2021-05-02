@@ -59,12 +59,13 @@ class userForm(ModelForm):
                 'sytle': 'with 100%',
 
             }),
-            'password': PasswordInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Ingrese su password',
-                'sytle': 'with 100%',
+            'password': PasswordInput(render_value=True,
+                                      attrs={
+                                          'class': 'form-control',
+                                          'placeholder': 'Ingrese su password',
+                                          'sytle': 'with 100%',
 
-            }),
+                                      }),
             'email': TextInput(attrs={
                 'class': 'form-control',
                 'placeholder': 'Ingrese su correo',
@@ -96,9 +97,17 @@ class userForm(ModelForm):
         form = super()
         try:
             if form.is_valid():
-                form.save()
+                pwd = self.cleaned_data['password']
+                u = form.save(commit=False)
+                if u.pk is None:
+                    u.set_password(pwd)
+                else:
+                    user = User.objects.get(pk=u.pk)
+                    if user.password != pwd:
+                        u.set_password(pwd)
+                u.save()
             else:
                 data['error'] = form.errors
         except Exception as e:
             data['error'] = str(e)
-            return data
+        return data

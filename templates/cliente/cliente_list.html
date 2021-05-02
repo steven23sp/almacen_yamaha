@@ -1,5 +1,6 @@
 {% extends 'bases/list.html' %}
 {% load  static %}
+
 {% block table %}
     <div class="card-header">
         <a href="{{ nuevo }}" class="btn btn-primary btn-sm">
@@ -29,4 +30,5 @@
 {% endblock %}
 {% block scripts_extra %}
     <script src="{% static 'app/cliente/list.js' %}"></script>
+
 {% endblock %}

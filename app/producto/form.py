@@ -1,51 +1,51 @@
-from django import forms
-from datetime import *
-from django.forms import SelectDateWidget, TextInput, NumberInput, EmailInput
-from .models import producto
-class productoForm(forms.ModelForm):
-    # constructor
+from django.forms import *
+from app.producto.models import *
+
+
+class productoForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        this_year = datetime.now().year
-        years = range(this_year - 15, this_year - 3)
-        for field in self.Meta.fields:
-            self.fields[field].widget.attrs.update({
-                'class': 'form-control'
-            })
-            self.fields['nombre'].widget = TextInput(
-                attrs={'placeholder': 'Ingrese el nombre', 'class': 'form-control form-rounded','autocomplete': 'off'})
-            self.fields['descripcion'].widget = TextInput(
-                attrs={'placeholder': 'Ingrese una descripcion', 'class': 'form-control form-rounded','autocomplete': 'off'})
-            self.fields['pvp'].widget = TextInput(
-                attrs={'placeholder': 'Ingrese el pvp', 'class': 'form-control form-rounded','autocomplete': 'off'})
-            self.fields['stock'].widget = TextInput(
-                attrs={'placeholder': 'Ingrese el stock', 'class': 'form-control form-rounded','autocomplete': 'off'})
-
-        # habilitar, desabilitar, y mas
+        self.fields['nombre'].widget.attrs['autofocus'] = True
 
     class Meta:
         model = producto
+        exclude = ['stock']
         fields = ['nombre',
                   'marca',
                   'modelo',
                   'descripcion',
                   'pvp',
-                  'stock',
-                  ]
-        labels = {
-            'nombre': 'Nombre',
-            'marca': 'Marca',
-            'modelo': 'Modelo',
-            'descripcion': 'Descripcion',
-            'pvp': 'Pvp',
-            'stock': 'Stock',
+                  'imagen'
 
-        }
+                  ]
         widgets = {
-            'nombre': forms.TextInput(),
-            'marca': forms.Select(attrs={'class': 'selectpicker', 'data-width': 'fit'}),
-            'modelo': forms.Select(attrs={'class': 'selectpicker', 'data-width': 'fit'}),
-            'descripcion': forms.TextInput(),
-            'pvp': forms.TextInput(),
-            'stock': forms.TextInput(),
+            'marca': Select(attrs={
+                'class': 'form-control select2',
+                'sytle': 'with 100%',
+
+            }),
+
+            'modelo': Select(attrs={
+                'class': 'form-control select2',
+                'sytle': 'with 100%',
+
+            }),
+            'nombre': TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ingrese el nombre del producto',
+                'sytle': 'with 100%',
+
+            }),
+            'descripcion': TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ingrese una descripcion al producto',
+                'sytle': 'with 100%',
+
+            }),
+            'pvp': TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ingrese el valor del producto',
+                'sytle': 'with 100%',
+
+            }),
         }

@@ -41,7 +41,7 @@ $(function () {
         var parametros = {'id': data.id};
         parametros['action'] = 'delete'
         submit_with_ajax_other(window.location.pathname, 'Alerta de Eliminacion!',
-            'Esta seguro que desea borrar este cliente', parametros, function (){
+            'Esta seguro que desea borrar este marca', parametros, function (){
             datatable.ajax.reload(null, false);
             })
     })

@@ -1,4 +1,4 @@
-var datatable;
+var datatable, tbldetalle;
 var venta = {
     items: {
         cliente: '',
@@ -11,6 +11,13 @@ var venta = {
         estado: '',
         producto: []
 
+    },
+     get_ids: function () {
+        var ids = [];
+        $.each(this.items.producto, function (key, value) {
+            ids.push(value.id);
+        });
+        return ids;
     },
     //agregar los productos
     add: function (item) {
@@ -40,17 +47,27 @@ var venta = {
             responsive: true,
             autoWidth: false,
             destroy: true,
-            dom: 'ltip',
+
             data: this.items.producto,
             columns: [
                 {"data": "id"},
                 {"data": "nombre"},
                 {"data": "marca.nombre"},
                 {"data": "modelo.nombre"},
+                {"data": "stock"},
                 {"data": "cantidad"},
                 {"data": "pvp"},
                 {"data": "subtotal"},
             ],
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json',
+            },
+            order: false,
+            paging: false,
+            ordering: false,
+            info: false,
+            searching: false,
+
             columnDefs: [
                 {
                     targets: [0],
@@ -86,7 +103,6 @@ var venta = {
                 },
             ],
             rowCallback: function (row, data) {
-                console.log(data);
                 $(row).find('input[name="cant"]').TouchSpin({
                     min: 1,
                     max: data.stock,
@@ -130,7 +146,8 @@ $(function () {
                 type: 'POST',
                 data: {
                     'action': 'search_products',
-                    'term': request.term
+                    'term': request.term,
+                    'ids': JSON.stringify(venta.get_ids())
                 },
                 dataType: 'json',
             }).done(function (data) {
@@ -149,11 +166,121 @@ $(function () {
             console.clear();
             ui.item.cant = 1;
             ui.item.subtotal = 0.00;
-            console.log(venta.items);
             venta.add(ui.item);
             $(this).val('');
         }
     });
+
+     // agregar cliente modal envento click boton
+    $('#btnaddcliente').on('click', function () {
+        //presentar modal de cliente
+        $('#mymodalcliente').modal('show');
+    });
+
+       //modal de tabla de productos
+    $('#buscar_producto').on('click', function () {
+            tbldetalle = $('#tbldetalle').DataTable({
+                responsive: true,
+                autoWidth: false,
+                destroy: true,
+                deferRender: true,
+                ajax: {
+                    url: window.location.pathname,
+                    type: 'POST',
+                    data: {
+                        'action': 'detalle',
+                        'ids': JSON.stringify(venta.get_ids())
+                        //'id': data.id
+                    },
+                    dataSrc: ""
+                },
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json',
+                },
+                columns: [
+                    {"data": "nombre"},
+                    {"data": "marca.nombre"},
+                    {"data": "modelo.nombre"},
+                    {"data": "stock"},
+                    {"data": "id"},
+
+                ],
+                columnDefs: [
+
+                    {
+                        targets: '_all',
+                        class: 'text-center',
+
+                    },
+                     {
+                targets: [-1],
+                class: 'text-center',
+                width: '10%',
+                orderable: false,
+                render: function (data, type, row) {
+                    return row.stock >= 1 ? '<a style="color: white" type="button" class="btn btn-success btn-xs" rel="select" ' +
+                        'data-toggle="tooltip" title="Seleccionar producto"><i class="fa fa-arrow-circle-right"></i></a>': ' '
+
+                }
+            },
+                ]
+            })
+            $('#mymodalproducto').modal('show');
+        });
+
+        $('#tbldetalle tbody').on('click', 'a[rel="select"]', function () {
+        var tr = tbldetalle.cell($(this).closest('td, li')).index();
+        var data = tbldetalle.row(tr.row).data();
+       venta.add(data);
+       $('#mymodalproducto').modal('hide');
+
+    });
+
+    $('#formcliente').on('submit', function (e) {
+        e.preventDefault();
+        var parameters = new FormData(this);
+        var isvalid = $(this).valid();
+        if (isvalid) {
+            parameters.append('action', 'add_venta');
+            submit_with_ajax('/cliente/crear/', 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters, function (response) {
+
+                $('#mymodalcliente').modal('hide');
+                var newOption = new Option(response.cliente['full'], response.cliente['id'], false, true);
+                $('select[name="cliente"]').append(newOption).trigger('change');
+            });
+        }
+
+    });
+
+
+
+     //buscar cliente
+    $('select[name="cliente"]').select2({
+        theme: "bootstrap4",
+        language: 'es',
+        allowClear: true,
+        ajax: {
+            delay: 250,
+            type: 'POST',
+            url: window.location.pathname,
+            data: function (params) {
+                var queryParameters = {
+                    term: params.term,
+                    action: 'search_cliente'
+                }
+                return queryParameters;
+            },
+            processResults: function (data) {
+                return {
+                    results: data
+
+                };
+            },
+        },
+        placeholder: 'Ingrese una descripción',
+        minimumInputLength: 1,
+    });
+
 
     $('.btnRemoveAll').on('click', function () {
         if (venta.items.producto.length === 0) return false;
@@ -164,6 +291,7 @@ $(function () {
                 venta.list();
             });
     });
+
 
     //eliminar productos del detalle
     $('#tblProducts tbody')
@@ -203,14 +331,16 @@ $(function () {
         parameters.append('venta', JSON.stringify(venta.items));
         submit_with_ajax(window.location.pathname, 'Notificación', '¿Estas seguro de realizar la siguiente acción?', parameters,
             function (response) {
-            printpdf('Alerta!', '¿Desea generar el comprobante en PDF?', function () {
+                printpdf('Alerta!', '¿Desea generar el comprobante en PDF?', function () {
                     window.open('/venta/printpdf/' + response['id'], '_blank');
-                    location.href = '/venta//lista/';
+                    location.href = '/venta/lista/';
                 }, function () {
-                    location.href = '/venta//lista/';
+                    location.href = '/venta/lista/';
                 })
-        });
+            });
     });
     venta.list();
+
+
 });
 

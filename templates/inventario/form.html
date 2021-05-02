@@ -1,0 +1,64 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_extra %}
+    <link rel="stylesheet" href="{% static 'lib/adminLTE/plugins/select2/css/select2.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'lib/adminLTE/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/tempusdominus-bootstrap-4/tempusdominus-bootstrap-4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'lib/bootstrap-touchspin-4.3.0/jquery.bootstrap-touchspin.css' %}">
+    <link href="{% static 'lib/jquery-ui-1.12.1/jquery-ui.min.css' %}" rel="stylesheet"/>
+{% endblock %}
+{% block conten %}
+ <div class="row">
+        <!--detalle-->
+        <div class="col-12">
+            <div class="card card-secondary">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fa fa-shopping-cart"></i>Compra no inventariadas</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Buscador</label>
+                        <div class="input-group ">
+                            {{ form.compra }}
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="tblProducts" class="table table-striped table-bordered " style="width: 100%">
+                            <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Marca</th>
+                                <th>Modelo</th>
+                                <th>Cantidad</th>
+                                <th>Ubicacion</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+
+
+                        </table>
+                    </div>
+                    <hr>
+                    <div class="card-footer">
+                        <button type="button" class="btn btn-primary btn-sm btn-flat" id="save">
+                            <i class="fas fa-save"></i> Guardar
+                        </button>
+                        <a type="button" class="btn btn-danger btn-sm btn-flat" href="{{ url }}">
+                            <i class="fas fa-times"></i> Cancelar
+                        </a>
+                    </div>
+                </div>
+                <!-- /.card-body -->
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts_extra %}
+    <script src="{% static 'app/inventario/form.js' %}"></script>
+{#    <script src="{% static 'app/proveedor/form.js' %}"></script>#}
+{% endblock %}
