@@ -145,6 +145,7 @@ $(document).ready(function () {
             return false;
         }
     });  //Para solo letras;
+
     $('#id_direccion').keyup(function () {
         var changue = $(this).val().replace(/\b\w/g, function (l) {
             return l.toUpperCase()

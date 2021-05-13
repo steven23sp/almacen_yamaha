@@ -6,5 +6,6 @@ app_name = 'devolucion'
 urlpatterns = [
 
     path('lista/', devolucion_list.as_view(), name='lista'),
+    path('reporte/', report.as_view(), name='reporte'),
 
 ]

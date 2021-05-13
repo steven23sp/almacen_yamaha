@@ -6,7 +6,7 @@ from django.views.generic import *
 
 from app.devolucion.models import devolucion
 from app.mixin import usuariomixin
-from app.venta.models import venta,detalle_venta
+from app.venta.models import venta, detalle_venta
 
 
 class devolucion_list(LoginRequiredMixin, usuariomixin, ListView):
@@ -19,7 +19,8 @@ class devolucion_list(LoginRequiredMixin, usuariomixin, ListView):
 
     def get_queryset(self):
         return devolucion.objects.none()
-    #def post(self, request, *args, **kwargs):
+
+    # def post(self, request, *args, **kwargs):
     #    data = {}
     #    try:
     #        action = request.POST['action']
@@ -72,11 +73,52 @@ class devolucion_list(LoginRequiredMixin, usuariomixin, ListView):
             data['error'] = str(e)
         return JsonResponse(data, safe=False)
 
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Listado de Devoluciones'
-        ##context['nuevo'] = reverse_lazy('cliente:crear')
         context['url'] = reverse_lazy('cliente:lista')
         context['entidad'] = 'Devoluciones'
         return context
+
+
+class report(LoginRequiredMixin, usuariomixin, ListView):
+    model = devolucion
+    template_name = 'reporte/devoluciones.html'
+
+    @csrf_exempt
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        action = request.POST['action']
+        if action == 'report':
+            data = []
+            start_date = request.POST.get('start_date', '')
+            end_date = request.POST.get('end_date', '')
+            try:
+                if start_date == '' and end_date == '':
+                    d = devolucion.objects.all()
+                else:
+                    d = devolucion.objects.filter(fecha__range=[start_date, end_date])
+
+                print(d)
+
+                for c in d:
+                    data.append([
+                        c['fecha'],
+                        c['venta__fecha_venta'].strftime("%Y/%m/%d"),
+                        c['venta__cliente_nombres'],
+                        format(c['venta.subtotal'], '.2f'),
+                        format(c['venta.total'], '.2f'),
+                    ])
+            except:
+                pass
+            return JsonResponse(data, safe=False)
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['entidad'] = 'Devoluciones'
+        data['title'] = 'Reporte de Devoluciones'
+
+        return data

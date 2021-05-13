@@ -22,7 +22,7 @@ $(function () {
             {"data": "modelo.nombre"},
             {"data": "descripcion"},
             {"data": "pvp"},
-            {"data": "stock"},
+            //{"data": "stock"},
             {"data": "imagen"},
             {"data": "id"},
 
@@ -47,23 +47,23 @@ $(function () {
                 }
             },
 
-            {
-                targets: [-3],
-                class: 'text-center',
-                orderable: false,
-                render: function (data, type, row) {
-                    if (row.stock === 0)
-                    {
-                        return '<span class=" badge badge-danger"> '+data+'</span>'
-                    }
-                    else
-                        if (row.stock <= 30)
-                        {
-                            return '<span class=" badge badge-warning"> '+data+'</span>'
-                        }
-                    return '<span class=" badge badge-success"> '+data+'</span>'
-                }
-            },
+            //{
+            //    targets: [-3],
+            //    class: 'text-center',
+            //   orderable: false,
+            //    render: function (data, type, row) {
+            //       if (row.stock === 0)
+            //       {
+            //            return '<span class=" badge badge-danger"> '+data+'</span>'
+            //        }
+            //        else
+            //            if (row.stock <= 30)
+            //            {
+            //                return '<span class=" badge badge-warning"> '+data+'</span>'
+            //            }
+            //        return '<span class=" badge badge-success"> '+data+'</span>'
+            //    }
+            //},
         ]
     });
 
