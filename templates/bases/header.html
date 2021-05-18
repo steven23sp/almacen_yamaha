@@ -8,14 +8,12 @@
             <a href="{% url 'dashbord:dashbord' %}" class="nav-link">Home</a>
         </li>
 
+
     </ul>
     <ul class="navbar-nav ml-auto">
-        <!-- Messages Dropdown Menu -->
-
-        <!-- Notifications Dropdown Menu -->
         <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown">
-                <i class="fa fa-user-alt">{{ request.user.username }} | {{ date_now }}</i>
+                <i class="fa fa-user-alt">{{ request.user.username }}</i>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <div class="dropdown-divider"></div>

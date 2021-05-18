@@ -16,10 +16,11 @@ class User(AbstractUser):
     sexo = models.IntegerField(choices=SEXO, default=1)
 
     def toJSON(self):
-        item = model_to_dict(self, exclude=['password','user_permissions','groups','last_login'])
+        item = model_to_dict(self, exclude=['password','user_permissions','last_login'])
         if self.last_login:
             item['last_login'] = self.last_login.strftime('%d-%m-%d')
         item['date_joined'] = self.date_joined.strftime('%d-%m-%Y')
+        item['groups'] = [{'id': g.id, 'name': g.name}for g in self.groups.all()]
         return item
 
     #def save(self, *args, **kwargs):

@@ -1,6 +1,7 @@
+from django.contrib.auth.models import Group
 from django.forms import *
 from app.user.models import *
-
+from django import forms
 
 class userForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -19,6 +20,7 @@ class userForm(ModelForm):
             'telefono',
             'direccion',
             'sexo',
+            'groups',
             'is_superuser'
         ]
         labels = {
@@ -31,6 +33,7 @@ class userForm(ModelForm):
             'telefono': 'Telefono',
             'direccion': 'Direccion',
             'sexo': 'Genero',
+            'groups': 'Grupos',
             'is_superuser': 'Administraidor'
 
         }
@@ -89,8 +92,13 @@ class userForm(ModelForm):
                 'sytle': 'with 100%',
 
             }),
+            'groups': SelectMultiple(attrs={
+                'class': 'form-control select2',
+                'sytle': 'with 100%',
+                'multiple': 'multiple'
+            })
         }
-        exclude = ['user_permissions', 'groups', 'last_login', 'date_joined']
+        exclude = ['user_permissions', 'last_login', 'date_joined']
 
     def save(self, commit=True):
         data = {}
@@ -106,8 +114,31 @@ class userForm(ModelForm):
                     if user.password != pwd:
                         u.set_password(pwd)
                 u.save()
+                u.groups.clear()
+                for g in self.cleaned_data['groups']:
+                    u.groups.add(g)
             else:
                 data['error'] = form.errors
         except Exception as e:
             data['error'] = str(e)
         return data
+
+class GroupForm(forms.ModelForm):
+    # constructor
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.Meta.fields:
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+            self.fields['name'].widget.attrs = {
+                'class': 'form-control form-control-sm input-sm'}
+            self.fields['permissions'].widget.attrs = {
+                'class': 'form-control form-control-sm input-sm select2',
+            'multiple': 'multiple'}
+
+    class Meta:
+        model = Group
+        fields = ['name', 'permissions']
+        labels = {'name': 'Nombre', 'permissions': 'Permisos'}
+        widgets = {'name': forms.TextInput()}
